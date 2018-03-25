@@ -1,4 +1,5 @@
-a{
+
+.connexion,.inscription{
     
     text-align: center;
     background-color:#3F51B5;
@@ -7,37 +8,36 @@ a{
     display: inline-block;
     overflow: hidden;
     margin-block-start: 3%;
-    width: 85%;
+    width: 100%;
+    border-radius: 50%;    
 
 }
 p{
     height: 50px;
 }
-div{
+.welcome{
   
     margin-left: auto;
     margin-right: auto;
     vertical-align: middle;
     text-align: center;
-    width:850px;
-    margin-top: 150px;
+   
+    margin-top: 200px;
     padding: 15px;
-}
-
-app-root{
-    justify-content: center;
-    margin-left: middle;
-    margin-right: middle;
-    vertical-align: middle;
-}
-nav{
-
-    background-color:white;
     height:300px;
     width: 400px;
-    max-width: 50%;
-    margin-left: auto;
-    margin-right: auto;
-
-
+   
 }
+
+
+footer{
+    background:lightgray;
+    position: absolute;
+    bottom: 0;
+    height: 5%;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 20px;
+    flex-direction: column;
+    width: 100%;
+}
+

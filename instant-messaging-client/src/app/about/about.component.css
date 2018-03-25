@@ -1,0 +1,33 @@
+body{
+    background: white;
+}
+app-root{
+    justify-content: center;
+    margin-left: middle;
+    margin-right: middle;
+    vertical-align: middle;
+    
+}
+
+div{
+    display: inline;
+    height: auto;
+    overflow: hidden;
+   margin-left:4%;
+   
+   
+}
+
+span{
+    margin-left: auto;
+    margin-right: auto;
+    vertical-align: middle;
+    text-align: center;
+    width:50%;
+    margin-top: 150px;
+    padding: 15px;
+}
+button:hover{
+    background: grey;
+    
+}

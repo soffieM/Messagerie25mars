@@ -2,18 +2,18 @@
 
 @import url('https://unpkg.com/bootstrap@3.3.7/dist/css/bootstrap.min.css');
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
-html { background-color: #3f51b5;
+html { 
     width: 100%;
     font-family: 'Times New Roman', Times, serif;
     font-size: 20px;
     flex-direction: column;
-    background-color:#3f51b5;
-    background-image: url('https://preview.ibb.co/f95mpc/fond3.png');
+    background-image: url('https://preview.ibb.co/fNZ4fH/Montagne.jpg');
      background-repeat: no-repeat;
      background-position:top center;
-     
+     background-size: cover;
      background-attachment:fixed;
-    
+    position: relative;
+    height: 100%;
 
  } 
 
@@ -25,5 +25,6 @@ html { background-color: #3f51b5;
         font-family: 'Times New Roman', Times, serif;
         font-size: 20px;
         flex-direction: column;
-        background-color:#3f51b5;       
+        background-color: transparent;
+              
     }

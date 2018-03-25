@@ -30,6 +30,7 @@ import { ContactListComponent } from './contact-list/contact-list.component';
 import { ContactComponent } from './contact/contact.component';
 import { ProfilComponent } from './profil/profil.component';
 import { DiscussionsListComponent } from './discussions-list/discussions-list.component';
+import { AboutComponent } from './about/about.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { DiscussionsListComponent } from './discussions-list/discussions-list.co
     ContactListComponent,
     ContactComponent,
     ProfilComponent,
-    DiscussionsListComponent
+    DiscussionsListComponent,
+    AboutComponent
   ],
   imports: [
     BrowserModule,
