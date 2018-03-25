@@ -3,8 +3,8 @@ import { InstantMessage } from './instant-message';
 import { RoutingService } from './routing.service';
 import { Discussion } from './discussion';
 import { DiscussionsListItem } from './discussions-list-item';
-import { DiscussionsListItemName } from './discussions-list-item-name';
-import { DiscussionsListIds } from './discussions-list-ids';
+import { DiscussionParticipantsNames } from './discussion-participants-names';
+import { DiscussionParticipantsIds } from './discussion-participants-ids';
 import { User } from './user';
 import { UserIdAndName } from './user-id-and-name';
 
@@ -19,17 +19,15 @@ export class InstantMessagingService {
   private invitations: string[] = [];
   private contacts: string [] = [];
   private discussionsList: string[]; // liste des numéros de discussion
-  private discussionsListName: DiscussionsListItemName[] = []; // liste des numéros de discussion + nom des participants
-  private discussionsComplete: DiscussionsListItem[]; // reçue du serveur
-  private discussionsListId: DiscussionsListIds[] = []; // liste des numéros de discussion + id des participants
+  private discussionsListName: DiscussionParticipantsNames[] = []; // liste des numéros de discussion + nom des participants
+  private discussionsListId: DiscussionParticipantsIds[] = []; // liste des numéros de discussion + id des participants
   private currentDiscussion: Discussion;
-  // private participants: string[];
-  private messages: InstantMessage[] = [];
+  private messages: InstantMessage[] = []; // peut être attribut de currentDiscussion, attention au départ
 
   public askDiscussion(contactId: string) {
-    let nbDiscussions = this.discussionsList.length;
+    let nbDiscussions = this.discussionsListId.length;
     if (nbDiscussions === 0) {
-      console.log('discussion vide à créer avec' + contactId);
+      console.log('discussions vide, en créer avec' + contactId);
       this.sendCreateDiscussion(contactId);
     } else {
       for (const discussion of this.discussionsListId) {
@@ -41,7 +39,7 @@ export class InstantMessagingService {
         }
         nbDiscussions--;
         if (nbDiscussions === 0) {
-          console.log('createDiscussion avec ' + contactId);
+          console.log('discussion pas trouvee, createDiscussion avec ' + contactId);
           this.sendCreateDiscussion(contactId); // crée la discussion
         }
       }
@@ -51,8 +49,7 @@ export class InstantMessagingService {
   private onFetchDiscussion(discussion: Discussion) {
     console.log('arrivé dans service onFetchDiscussion, discussion ' + discussion.id);
     this.currentDiscussion = new Discussion (discussion.id, discussion.participants, discussion.history);
-    console.log('changé currentDiscussion.id' + this.currentDiscussion.id);
-    console.log('participants ' + this.currentDiscussion.participants);
+    console.log('changé currentDiscussion.id' + this.currentDiscussion.id + 'et participants ' + this.currentDiscussion.participants);
     this.messages = this.currentDiscussion.history; // à supprimer après refactoring
   }
 
@@ -75,35 +72,24 @@ export class InstantMessagingService {
   }
 
   private onDiscussionList(discussionsList: DiscussionsListItem[]) {
-    this.discussionsComplete = discussionsList;
-   // const discussions: DiscussionsListItem[] = [];
-    console.log(this.discussionsComplete);
-    for (let i = 0; i < this.discussionsComplete.length; i++) {
+    console.log('discussionsList obtenu onDiscussion ' + discussionsList);
+    for (let i = 0; i < discussionsList.length; i++) {
       const participantsId: string[] = [];
       const participantsName: string[] = [];
-      const disc: DiscussionsListItem = this.discussionsComplete[i];
+      const disc: DiscussionsListItem = discussionsList[i];
       for (let j = 0; j < disc.participants.length; j++) {
         const userId = disc.participants[j].userId;
-        console.log(userId);
         const username: string = disc.participants[j].username;
-        console.log(username);
-        participantsName.push(username);
-        console.log(participantsName);
         participantsId.push(userId);
+        participantsName.push(username);
       }
-    // console.log(this.discussionsComplete['0'].discussionId);
-
-    const discussiontmp: any = this.discussionsComplete[i];
+    const discussiontmp: any = discussionsList[i];
     const id: string = discussiontmp.id;
-    // console.log(discussiontest.discussionId);
-    // console.log(this.discussionsComplete['0'].discussionId);
-    console.log(id);
-    console.log(this.discussionsListId);
     this.discussionsListId.push({id, participantsId});
-    console.log(participantsName);
-    console.log(this.discussionsListName);
     this.discussionsListName.push({id, participantsName});
-   }
+    }
+    console.log('discussionListId devient ' + this.discussionsListId);
+    console.log('discussionListname devient ' + this.discussionsListName);
   }
 
   private onConnection(username: string) {
@@ -179,7 +165,7 @@ export class InstantMessagingService {
     return this.contacts;
   }
 
-   public getDiscussionsListName(): DiscussionsListItemName[] {
+   public getDiscussionsListName(): DiscussionParticipantsNames[] {
     return this.discussionsListName;
   }
 
@@ -222,7 +208,7 @@ export class InstantMessagingService {
   }
 
   public sendAddParticipant(contact: string) {
-    const addParticipant = {discussionId: this.currentDiscussion.id, contact: contact};
+    const addParticipant = {id: this.currentDiscussion.id, contact: contact};
     this.sendMessage('addParticipant', addParticipant);
   }
 

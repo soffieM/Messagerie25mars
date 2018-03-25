@@ -3,8 +3,8 @@
 <ul class="contacts">
   <li *ngFor="let contact of service.getContacts()"
     [class.selected]="contact === selectedContact" 
-    (click)="onSelect(contact)">
-    {{contact}}    <span class="badge"> <button (click)="addParticipant(discussion.id)">+</button></span> 
+    (click)="onSelect(contact)"> <span class="badge"> 
+    {{contact}}  </span>  <button (click)="addParticipant(discussion.id)">+</button>
 
   </li>
 </ul>

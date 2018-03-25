@@ -54,17 +54,13 @@ class Client {
             const discussionsList = [];
             for (let i = 0; i < discussions.length; i++) {
                 const id = discussions[i].id;
-                console.log('discussions = ' + id);
                 const participants = [];
                 const participantsComplet = yield this.db.getParticipants(id); // toute l'info user
-                console.log('participants = ' + participantsComplet[0]);
                 for (let i = 0; i < participantsComplet.length; i++) {
                     const userId = participantsComplet[i];
-                    console.log('participant = ' + userId);
                     const username = yield this.db.getUsername(userId);
-                    console.log('de nom = ' + username);
+                    console.log('on ajoute participant = ' + userId + 'de nom = ' + username + 'discussion = ' + id);
                     participants.push({ userId, username });
-                    console.log('discussions = ' + participants[0]);
                 }
                 discussionsList.push({ id, participants });
             }
@@ -109,7 +105,7 @@ class Client {
                     console.log("userid " + this.userId);
                     this.sendOwnUser(username);
                     this.sendDiscussionsList(this.userId);
-                    // this.server.broadcastUsersList();
+                    this.server.broadcastUsersList();
                     this.server.broadcastUserConnection('connection', username);
                 }
             }
@@ -186,9 +182,7 @@ class Client {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('client.ts on entre dans la fonction onFetchDiscussion ' + id);
             const participants = yield this.db.getParticipants(id);
-            console.log('client.ts FetchDiscussion ' + id + ' : trouve participants' + participants[0] + participants[1]);
             const history = yield this.db.getHistory(id);
-            console.log('client.ts FetchDiscussion ' + id + ' : trouve historique');
             const discussion = { id, participants, history };
             this.sendMessage('discussion', discussion);
         });
@@ -203,7 +197,7 @@ class Client {
     }
     onQuitDiscussion(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log('quitte discussion' + id);
+            console.log(this.userId + 'quitte discussion' + id);
             yield this.db.deleteParticipantFromDiscussion(this.userId, id);
             yield this.db.deleteDiscussionFromUser(id, this.userId);
             this.server.broadcastFetchDiscussion(id);

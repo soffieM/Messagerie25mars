@@ -51,17 +51,13 @@ export class Client {
         const discussionsList: any[] =[];
         for (let i = 0; i < discussions.length; i++){
             const id = discussions[i].id;
-            console.log('discussions = '+id);
             const participants:any[]=[];
             const participantsComplet = await this.db.getParticipants(id);// toute l'info user
-            console.log('participants = '+ participantsComplet[0]);
             for (let i = 0; i < participantsComplet.length; i++){
                 const userId = participantsComplet[i];
-                console.log('participant = '+ userId);
                 const username = await this.db.getUsername(userId);
-                console.log('de nom = '+username);
+                console.log('on ajoute participant = '+ userId +'de nom = '+username + 'discussion = '+id);
                 participants.push({userId, username});
-                console.log('discussions = '+participants[0]);
             }
             discussionsList.push({id, participants});
         }
@@ -106,7 +102,7 @@ export class Client {
             this.sendOwnUser(username);
             this.sendDiscussionsList(this.userId);
 
-            // this.server.broadcastUsersList();
+            this.server.broadcastUsersList();
             this.server.broadcastUserConnection('connection', username); 
             }
         } else {
@@ -177,9 +173,7 @@ export class Client {
     async onFetchDiscussion(id: string) {
         console.log('client.ts on entre dans la fonction onFetchDiscussion ' + id );
         const participants = await this.db.getParticipants(id);
-        console.log('client.ts FetchDiscussion ' + id + ' : trouve participants' + participants[0] + participants[1]);
         const history = await this.db.getHistory(id);        
-        console.log('client.ts FetchDiscussion ' + id + ' : trouve historique');
         const discussion = {id, participants, history};
         this.sendMessage('discussion', discussion);
     }
@@ -192,7 +186,7 @@ export class Client {
     }
 
     async onQuitDiscussion(id: string) {
-        console.log('quitte discussion' + id);
+        console.log(this.userId + 'quitte discussion' + id);
         await this.db.deleteParticipantFromDiscussion(this.userId, id);
         await this.db.deleteDiscussionFromUser(id, this.userId)
         this.server.broadcastFetchDiscussion(id);
