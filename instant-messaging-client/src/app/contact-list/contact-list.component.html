@@ -1,0 +1,22 @@
+<p>Liste des Contacts</p>
+
+<ul class="contacts">
+  <li *ngFor="let contact of service.getContacts()"
+    [class.selected]="contact === selectedContact" 
+    (click)="onSelect(contact)">
+    {{contact}}    <span class="badge"> <button (click)="addParticipant(discussion.id)">+</button></span> 
+
+  </li>
+</ul>
+
+<!--
+<div class="contacts">
+    <p>Liste des Contacts</p>
+       <app-contact *ngFor="let contact of service.getContacts()"
+       [class.selected]="contact === selectedContact" 
+       (click)="onSelect(contact)"
+       
+        [contact]="contact">  
+       </app-contact>
+</div>
+-->

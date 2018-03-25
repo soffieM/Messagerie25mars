@@ -1,0 +1,43 @@
+{
+    "name": "websocket",
+    "libraryName": "websocket",
+    "sourceRepoURL": "https://www.github.com/DefinitelyTyped/DefinitelyTyped",
+    "data": {
+        "contributors": [
+            {
+                "name": "Paul Loyd",
+                "url": "https://github.com/loyd"
+            },
+            {
+                "name": "Kay Schecker",
+                "url": "https://github.com/flynetworks"
+            }
+        ],
+        "dependencies": {
+            "events": "*",
+            "http": "*",
+            "https": "*",
+            "net": "*",
+            "url": "*",
+            "node": "*"
+        },
+        "pathMappings": {},
+        "libraryMajorVersion": 0,
+        "libraryMinorVersion": 0,
+        "typeScriptVersion": "2.0",
+        "libraryName": "websocket",
+        "typingsPackageName": "websocket",
+        "projectName": "https://github.com/theturtle32/WebSocket-Node",
+        "sourceRepoURL": "https://www.github.com/DefinitelyTyped/DefinitelyTyped",
+        "globals": [],
+        "declaredModules": [
+            "websocket/."
+        ],
+        "files": [
+            "index.d.ts"
+        ],
+        "hasPackageJson": false,
+        "contentHash": "cf345db07bab861a29500483eca68f6926a4a590f580e3575d74e8b875cc2f7b"
+    },
+    "isLatest": true
+}

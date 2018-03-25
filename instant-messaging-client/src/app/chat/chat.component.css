@@ -1,0 +1,11 @@
+button:hover {
+    background-color: rgb(14, 4, 158);
+}
+    
+/deep/ .menuProf {
+     background-color: rgb(222, 231, 235);
+    }
+    
+button::-moz-focus-inner {
+    border: 0;
+} 

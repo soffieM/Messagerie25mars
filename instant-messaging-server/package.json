@@ -1,0 +1,22 @@
+{
+  "name": "instant-messaging-server",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "gulp"
+  },
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-ts": "^6.0.0-beta.15",
+    "gulp": "^3.9.1",
+    "gulp-typescript": "^3.1.1",
+    "typescript": "^2.3.1"
+  },
+  "dependencies": {
+    "@types/websocket": "0.0.33",
+    "bcrypt": "^1.0.3",
+    "mongodb": "^2.2.33",
+    "websocket": "^1.0.24"
+  }
+}

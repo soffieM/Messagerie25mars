@@ -1,0 +1,27 @@
+<div>
+  {{errorMessage}}
+</div>
+
+<div *ngIf="errorMessage === 'Mot de passe incorrect'">
+ <span>Cliquer </span>
+            <a routerLink="/login">ici</a>
+ <span> pour vous identifier.</span>
+</div>
+
+<div *ngIf="errorMessage === 'Login non reconnu'">
+  <span>Cliquer </span>
+             <a routerLink="/login">ici</a>
+  <span> pour vous identifier.</span>
+ </div>
+
+<div *ngIf="errorMessage === 'Pseudo déjà utilisé'">
+  <span>Cliquer </span>
+             <a routerLink="/subscribe">ici</a>
+  <span> pour vous inscrire.</span>
+ </div>
+
+ <div *ngIf="errorMessage === 'Compte déjà existant'">
+  <span>Cliquer </span>
+             <a routerLink="/subscribe">ici</a>
+  <span> pour accéder à la page de récupération du mot de passe.</span>
+ </div>

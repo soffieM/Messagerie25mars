@@ -1,0 +1,49 @@
+<mat-card>
+  <mat-toolbar id="bar" layout-align="center center" color="primary">
+    <div class="mat-toolbar-tools">
+       <h2> LOGIN </h2>
+      <span flex></span>
+    </div>
+  </mat-toolbar>
+  
+  <p> </p>
+  
+  <!--<form layout="row">  -->
+    <span flex></span>
+    <div class="ensemble" layout="column">
+      <div>
+        <mat-icon class="material-icons" color="primary">person</mat-icon>
+        <mat-input-container class="fullwidth">
+          <input matInput name="log" placeholder="Nom d'utilisateur" class="login-input" type="text" [(ngModel)]="username" (keyup.enter)="send()"/>
+        </mat-input-container>
+      </div>
+      <div>
+        <mat-icon class="material-icons" color="primary">lock</mat-icon>
+        <mat-input-container class="fullwidth">
+          <input matInput name="pass" placeholder="Mot de passe" class="password-input" type="password" [(ngModel)]="password" (keyup.enter)="send()">
+        </mat-input-container>
+      </div>
+      
+      <div class="buttonLog">
+          <p> </p>
+          <button class="mat-primary mat-raised" (click)="goBack()"> Annuler </button> 
+          <button class="mat-primary mat-raised" (click)="send()"> Valider </button> 
+      </div>
+    </div> 
+    <span flex></span>
+  <!--</form>-->
+</mat-card> 
+
+<!--<div class="login-form">
+  <label>Login:</label>
+  <input class="login-input" type="text" [(ngModel)]="username" (keyup.enter)="send()"/>
+  <p></p>
+  <label>Mot de passe: </label>
+  <input class="password-input" type="password" [(ngModel)]="password" (keyup.enter)="send()"/>
+  <div>
+    <p></p>
+    <button (click)="goBack()">Annuler</button>
+    <button (click)="send()">Valider</button>
+  </div>
+</div>
+-->

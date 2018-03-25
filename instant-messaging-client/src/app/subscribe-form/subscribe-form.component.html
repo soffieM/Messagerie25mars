@@ -1,0 +1,43 @@
+<div class="container">
+  <h1>Inscription</h1>
+      <form (ngSubmit)="onSubmit()" #subscribeForm="ngForm">
+        <div class="form-group">
+          <label for="username">Nom d'utilisateur</label>
+          <input type="text" class="form-control" id="name" required minlength="4" maxlength="20" [(ngModel)]="username" name="name" #name="ngModel">
+          <div *ngIf="name.invalid && (name.dirty || name.touched)"
+            class="alert alert-danger">
+            <div *ngIf="name.errors.required">
+              Nom d'utilisateur requis
+            </div>
+            <div *ngIf="name.errors.minlength">
+              Le nom d'utilisateur doit être de 5 caractères minimum.
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Mot de passe</label>
+          <input type="password" class="form-control" id="password" required minlength="6" maxlength="12" [(ngModel)]="password" name="password" #pwd="ngModel">
+          <div *ngIf="pwd.invalid && (pwd.dirty || pwd.touched)"
+            class="alert alert-danger">
+            <div *ngIf="pwd.errors.required">
+              Mot de passe requis
+            </div>
+            <div *ngIf="pwd.errors.minlength">
+              Le mot de passe doit être de 6 caractères minimum.
+           </div>
+          </div>
+        </div>
+   
+        <div class="form-group">
+          <label for="mail">Adresse mail</label>
+          <input type="email" class="form-control" id="mail" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" [(ngModel)]="mail" name="mail" #mel="ngModel">
+          <div [hidden]="mel.valid || mel.pristine"
+               class="alert alert-danger">
+            Adresse mail requise
+          </div>
+        </div>
+        <button (click)="goBack()">Annuler</button>
+        <button type="submit" class= "btn-success" [disabled]="!subscribeForm.form.valid">Envoyer</button>
+      </form>
+    </div>

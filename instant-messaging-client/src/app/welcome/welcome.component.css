@@ -1,0 +1,43 @@
+a{
+    
+    text-align: center;
+    background-color:#3F51B5;
+    color: white;
+    padding: 6%;
+    display: inline-block;
+    overflow: hidden;
+    margin-block-start: 3%;
+    width: 85%;
+
+}
+p{
+    height: 50px;
+}
+div{
+  
+    margin-left: auto;
+    margin-right: auto;
+    vertical-align: middle;
+    text-align: center;
+    width:850px;
+    margin-top: 150px;
+    padding: 15px;
+}
+
+app-root{
+    justify-content: center;
+    margin-left: middle;
+    margin-right: middle;
+    vertical-align: middle;
+}
+nav{
+
+    background-color:white;
+    height:300px;
+    width: 400px;
+    max-width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+
+
+}

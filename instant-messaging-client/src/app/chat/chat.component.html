@@ -1,0 +1,27 @@
+<mat-toolbar color="primary">
+    <mat-toolbar-row>
+        <span class="example-spacer"></span>
+        <button mat-icon-button [matMenuTriggerFor]="appMenu"><mat-icon>menu</mat-icon></button>
+    </mat-toolbar-row>
+</mat-toolbar>
+      
+<mat-menu class="menuProf" #appMenu="matMenu" xPosition="after" [overlapTrigger]="false">
+    <button class="btn" mat-menu-item routerLink="/profil"> Profile </button>
+    <button class="btn" mat-menu-item routerLink="/welcome"> Déconnexion </button>
+</mat-menu><div *ngIf="!service.isLogged()">
+
+    <span>Vous n'êtes pas connecté, cliquer </span>
+            <a routerLink="/login">ici</a>
+    <span> pour vous identifier.</span>
+</div>
+
+<div *ngIf="service.isLogged()">
+    <app-message-list></app-message-list>
+    <!--app-connected-people-list></app-connected-people-list-->
+    <app-new-message-form></app-new-message-form>
+    <app-invitation-form></app-invitation-form>
+    <app-invitation-list></app-invitation-list>
+    <app-contact-list></app-contact-list>
+    <app-discussions-list></app-discussions-list>
+    
+</div>
