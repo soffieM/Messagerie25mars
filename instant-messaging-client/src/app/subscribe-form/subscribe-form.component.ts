@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { InstantMessagingService } from 'app/instant-messaging.service';
 import { Location } from '@angular/common';
+import { RoutingService } from '../routing.service';
 
 @Component({
   selector: 'app-subscribe-form',
@@ -13,7 +14,7 @@ export class SubscribeFormComponent {
   private password = '';
   private mail = '';
 
-  constructor(private service: InstantMessagingService, private location: Location) { }
+  constructor(private service: InstantMessagingService, private routing: RoutingService) { }
 
   onSubmit() {
     console.log(this.username + this.password + this.mail);
@@ -25,6 +26,6 @@ export class SubscribeFormComponent {
   }
 
   private goBack(): void {
-    this.location.back();
+    this.routing.goLogin();
   }
 }

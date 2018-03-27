@@ -1,1 +1,53 @@
-<p> en cours... </p>
+<mat-card>
+    <mat-toolbar id="bar" layout-align="center center" color="primary">
+      <div class="mat-toolbar-tools">
+        <h2> PROFIL EDITING </h2>
+        <span flex></span>
+      </div>
+    </mat-toolbar>
+    
+    <p> </p>
+    
+    <form layout="row">  
+      <span flex></span>
+        <div class="ensemble" layout="column">
+          <div>
+              Nom d'utilisateur <input name="log" placeholder="modifier" class="login-input" type="text">
+          </div>
+          <p></p>
+          <div>
+              Prénom <input name="log" placeholder="modifier" class="prenom-input" type="text">
+          </div>
+          <p></p>
+          <div>
+              Nom   <input name="log" placeholder="modifier" class="nom-input" type="text" [(ngModel)]="username" (keyup.enter)="send()"/>
+          </div>
+          <p></p>
+          <div class="form-group">
+                <label for="file"> Télécharger une image de profile </label>
+                <input type="file"
+                       id="file"
+                       (change)="handleFileInput($event.target.files)">
+          </div>
+
+          <p></p>
+          <div>
+                Modifier le mot de passe  
+                <button class="password"> <mat-icon class="material-icons" color="primary">lock</mat-icon>
+                </button>
+
+              </div>
+      
+      <div class="buttonLog">
+      <p></p>
+      <button class="mat-primary mat-raised" routerLink="/profil"> Valider </button> 
+      </div>
+        
+      </div>
+      
+      <span flex></span>
+    </form>
+    </mat-card>
+
+  <mat-icon style="font-size: 1000%" class="avatar" color="primary">person</mat-icon>  
+

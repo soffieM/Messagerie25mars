@@ -1,22 +1,24 @@
-<p>Liste des Contacts</p>
+<mat-list>
 
-<ul class="contacts">
-  <li *ngFor="let contact of service.getContacts()"
-    [class.selected]="contact === selectedContact" 
-    (click)="onSelect(contact)"> <span class="badge"> 
-    {{contact}}  </span>  <button (click)="addParticipant(discussion.id)">+</button>
+  <mat-list-item *ngFor="let contact of service.getContacts()">
 
-  </li>
-</ul>
+      <mat-button-toggle-group>
 
-<!--
-<div class="contacts">
-    <p>Liste des Contacts</p>
-       <app-contact *ngFor="let contact of service.getContacts()"
-       [class.selected]="contact === selectedContact" 
-       (click)="onSelect(contact)"
-       
-        [contact]="contact">  
-       </app-contact>
-</div>
--->
+          <mat-button-toggle [class.selected]="contact === selectedContact" (click)="onSelect(contact)">
+          {{contact}}
+          </mat-button-toggle>
+
+          <button class="addP" (click)="addParticipant(discussion.id)">
+              <mat-icon id="addParticipant">add</mat-icon> 
+          </button>
+
+      </mat-button-toggle-group>
+
+  </mat-list-item>
+
+</mat-list>
+
+<p></p>
+<app-invitation-form></app-invitation-form>
+
+

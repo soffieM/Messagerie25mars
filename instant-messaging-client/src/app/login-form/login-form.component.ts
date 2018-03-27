@@ -23,9 +23,4 @@ export class LoginFormComponent {
   private send(): void {
     this.service.sendLogin(this.username, this.password);
   }
-
-  private goBack(): void {
-    this.location.back();
-  }
 }
-

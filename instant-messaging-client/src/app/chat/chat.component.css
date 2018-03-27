@@ -1,11 +1,58 @@
 button:hover {
-    background-color: rgb(14, 4, 158);
+    background-color:#1D2731;
+    opacity: 0.5;
 }
     
 /deep/ .menuProf {
      background-color: rgb(222, 231, 235);
     }
-    
+
 button::-moz-focus-inner {
     border: 0;
 } 
+
+.mat-toolbar {
+    position: relative;
+    background-color: #0B3C5D;
+}
+
+.mat-icon {
+    color: white;
+}
+
+/*
+#avatar {
+    padding: 10px;
+}
+*/
+
+#nom {
+    padding: 10px;
+    color: white;
+    font-style: italic;
+}
+
+/*
+#iconToolbarFleche {
+    padding: 10px;
+}
+*/
+
+.menuSide {
+    position: relative;
+    min-height: 2000px;
+  }
+
+#barreGauche {
+    width: 30%;
+    background-color: #0B3C5D;
+}
+
+.btnSide {
+    background-color: transparent;
+    color: rgb(255, 255, 255);
+    width: 100%;
+    text-align: left;
+    padding: 10px;
+    font-weight: bold;
+}

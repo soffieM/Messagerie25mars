@@ -1,7 +1,8 @@
 import { Component} from '@angular/core';
 import { InstantMessagingService } from '../instant-messaging.service';
 import { DiscussionParticipantsNames } from '../discussion-participants-names';
-
+import { MatListModule } from '@angular/material/list';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 @Component({
   selector: 'app-discussions-list',
@@ -18,6 +19,7 @@ export class DiscussionsListComponent {
   }
 
   private quitDiscussion(discussionId: string) {
+    console.log("poubelle" + discussionId);
     this.service.sendQuitDiscussion(discussionId);
   }
 }

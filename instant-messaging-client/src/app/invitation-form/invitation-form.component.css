@@ -1,8 +1,24 @@
-.invitation-form {
+.login-input {
     position: relative;
-	float: right;
-	background-color : #a9b8de;
+	float: left;
+	background-color : white;
 	border-top : none;
-	font-family : Georgia, "Times New Roman", Times, serif;
 	color : #202020;
+	width:60%;
+	height: 25px;
+}
+
+#loupe {
+	color:"black";
+	background: white;
+}
+
+button {
+	background: white;
+	height: 25px;
+	border: none;
+}
+
+span {
+	margin-left: 3%;
 }

@@ -11,8 +11,7 @@ import { ErrorComponent } from './error/error.component';
 import { ProfilComponent } from './profil/profil.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/welcome', pathMatch: 'full' },
-  { path: 'welcome', component: WelcomeComponent },
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'login', component: LoginFormComponent },
   { path: 'subscribe', component: SubscribeFormComponent },
   { path: 'chat', component: ChatComponent },

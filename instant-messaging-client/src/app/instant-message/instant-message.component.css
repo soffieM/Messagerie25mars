@@ -1,0 +1,66 @@
+.ensemble {
+    position: relative;
+    left: 30%;
+    top: 10%;
+    right: auto;
+    bottom: auto;
+    max-width: 70%;
+}
+
+.bulle {
+    width: 50%;
+}
+
+.messageCard {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    background-color: rgb(133, 201, 171);
+    width: fit-content;
+    padding: 25px;
+}
+
+.messageCard2 {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    background-color: rgb(201, 141, 133);
+    width: fit-content;
+}
+
+.messAut {
+    float:left;
+    width: 100%;
+}
+
+.messageDate {
+    font-size: 70%;
+    text-align: right;
+    color: grey;
+    padding: 25px;
+    padding-top: 5px;
+}
+
+.messageItself {
+    font-size: 120%;
+    margin-top: 25px;
+    text-align: left;
+}
+
+.messageTitle {
+    font-style: italic;
+    font-size: 80%;
+    margin-bottom: 5px;
+    text-align: left;
+}
+
+.sep1 {
+    width: 100%;
+    color: rgb(53, 53, 53);
+}
+
+.sep2 {
+    width: 100%;
+}
+
+td {
+    width:100%;
+    position: relative;
+}
+

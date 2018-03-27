@@ -7,24 +7,18 @@ html {
     font-family: 'Times New Roman', Times, serif;
     font-size: 20px;
     flex-direction: column;
-    background-image: url('https://preview.ibb.co/fNZ4fH/Montagne.jpg');
      background-repeat: no-repeat;
      background-position:top center;
      background-size: cover;
      background-attachment:fixed;
     position: relative;
     height: 100%;
-
  } 
-
-
-    
-    body{
-    
-        width: 100%;
-        font-family: 'Times New Roman', Times, serif;
-        font-size: 20px;
-        flex-direction: column;
-        background-color: transparent;
-              
-    }
+  
+body {
+    width: 100%;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 20px;
+    flex-direction: column;
+    background-color: transparent;
+}

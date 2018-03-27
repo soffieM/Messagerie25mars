@@ -1,0 +1,14 @@
+#image {
+    position: absolute;
+    top:20%;
+    left:50%;
+    width: 15%;
+    height: 30%;
+    text-align: center;
+    margin: auto;
+    background-color: transparent; 
+    border-radius: 50%;
+    display: flex;
+    content: center;
+}
+

@@ -7,6 +7,10 @@ import { MatToolbarModule, MatInputModule, MatProgressSpinnerModule, MatCardModu
 import { MatIconModule} from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material';
 import { MatButtonModule } from '@angular/material/button';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {MatDividerModule} from '@angular/material/divider';
 
 import { AppComponent } from './app.component';
 import { MessageListComponent } from './message-list/message-list.component';
@@ -68,6 +72,10 @@ import { AboutComponent } from './about/about.component';
     MatCardModule,
     MatIconModule,
     MatMenuModule,
+    MatSidenavModule,
+    MatListModule,
+    MatButtonToggleModule,
+    MatDividerModule
   ],
   entryComponents: [
     ProfilComponent

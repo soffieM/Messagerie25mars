@@ -163,6 +163,10 @@ export class InstantMessagingService {
     return this.invitations;
   }
 
+  public getUserName(): string {
+    return this.user.username;
+  }
+
   public getContacts(): string[] {
     return this.contacts;
   }

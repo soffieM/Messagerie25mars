@@ -1,0 +1,35 @@
+div {
+    width:100%;
+    background-color: transparent;
+    color: lightblue;
+}
+
+/*
+div:hover #corbeille {
+    color: white;
+    opacity: 0.5;
+    visibility: visible;
+}
+
+
+div:hover #ajouter {
+    color: white;
+    opacity: 0.5;
+    visibility: visible;
+}
+*/
+
+
+#corbeille {
+    visibility: visible;
+}
+
+#ajouter {
+    visibility: visible;
+}
+
+button {
+    background-color: red;
+    border: none;
+}
+

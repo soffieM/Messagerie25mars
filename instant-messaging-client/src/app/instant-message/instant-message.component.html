@@ -1,3 +1,73 @@
-<div>
-  <b>{{message.author}}</b> ({{message.date | date:'medium'}}) : {{message.content}} 
+<div class="ensemble">
+
+  <table>
+
+    <tr></tr>
+
+    <tr *ngIf="messAuto()==true" class="messAut">
+      <p>
+        <b>{{message.content}}</b> ({{message.date | date: "'le ' dd MMMM yyyy 'à ' HH:mm"}})
+      </p>
+    </tr>
+
+    <tr></tr>
+
+    <tr *ngIf="emis()==true" class="bulle" id="emission">
+
+      <mat-card class="messageCard">
+
+        <mat-card-title class="messageTitle">
+          {{message.author}} a écrit :
+        </mat-card-title>
+        
+        <mat-divider class="sep1" [inset]=true></mat-divider>
+
+        <mat-card-content class="messageItself">
+          {{message.content}} 
+        </mat-card-content>
+
+        <mat-divider class="sep2" [inset]=true></mat-divider>
+
+        <mat-card-footer class="messageDate">
+          {{message.date | date: "'le ' dd MMMM yyyy 'à ' HH:mm"}} 
+        </mat-card-footer>
+
+      </mat-card>
+
+    </tr>
+
+    <tr></tr>
+
+    <tr *ngIf="emis()!=true && messAuto()!=true" class="bulle" id="reception">
+
+      <td></td>
+
+      <td>
+
+        <mat-card class="messageCard2">
+        
+          <mat-card-title class="messageTitle">
+            {{message.author}} a écrit:
+          </mat-card-title>
+          
+          <mat-divider class="sep1" [inset]=true></mat-divider>
+        
+          <mat-card-content class="messageItself">
+            {{message.content}} 
+          </mat-card-content>
+        
+          <mat-divider class="sep2" [inset]=true></mat-divider>
+        
+          <mat-card-footer class="messageDate">
+            {{message.date | date: "'le ' dd MMMM yyyy 'à ' HH:mm"}} 
+          </mat-card-footer>
+        
+        </mat-card>
+
+      </td>
+
+    </tr>
+
+  </table>
+
 </div>

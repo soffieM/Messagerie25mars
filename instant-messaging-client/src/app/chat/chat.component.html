@@ -1,27 +1,95 @@
-<mat-toolbar color="primary">
+<mat-toolbar>
+
     <mat-toolbar-row>
-        <span class="example-spacer"></span>
-        <button mat-icon-button [matMenuTriggerFor]="appMenu"><mat-icon>menu</mat-icon></button>
-    </mat-toolbar-row>
-</mat-toolbar>
-      
-<mat-menu class="menuProf" #appMenu="matMenu" xPosition="after" [overlapTrigger]="false">
-    <button class="btn" mat-menu-item routerLink="/profil"> Profile </button>
-    <button class="btn" mat-menu-item routerLink="/welcome"> Déconnexion </button>
-</mat-menu><div *ngIf="!service.isLogged()">
 
-    <span>Vous n'êtes pas connecté, cliquer </span>
-            <a routerLink="/login">ici</a>
-    <span> pour vous identifier.</span>
-</div>
+        <span id="nom"> {{service.getUserName()}} </span>
 
-<div *ngIf="service.isLogged()">
-    <app-message-list></app-message-list>
-    <!--app-connected-people-list></app-connected-people-list-->
-    <app-new-message-form></app-new-message-form>
-    <app-invitation-form></app-invitation-form>
-    <app-invitation-list></app-invitation-list>
-    <app-contact-list></app-contact-list>
-    <app-discussions-list></app-discussions-list>
+        <mat-icon id="avatar" style="font-size: 150%">person</mat-icon>
+        
+        <button mat-icon-button [matMenuTriggerFor]="appMenu">
+            <mat-icon id="iconToolbarFleche">keyboard_arrow_down</mat-icon>
+        </button>
+
     
-</div>
+    </mat-toolbar-row>
+    
+</mat-toolbar>
+ 
+
+<mat-menu class="menuProf" #appMenu="matMenu">
+    <button class="btn" mat-menu-item routerLink="/profil"> Profil </button>
+    <button class="btn" mat-menu-item (click)="service.unLog()"> Déconnexion </button>
+</mat-menu>
+
+
+
+<mat-sidenav-container class="menuSide">
+
+    <mat-sidenav id="barreGauche" mode="side" class="navig" opened>
+
+        <p></p>
+
+        <mat-list>
+    
+
+            <mat-list-item>
+
+                <div class="btnSide"> INVITATIONS </div>
+                <button mat-icon-button class="accordion" (click)="afficheInvitations()">
+                    <mat-icon *ngIf="!visibilityInvitation" id="iconSideFleche">keyboard_arrow_down</mat-icon> 
+                    <mat-icon *ngIf="visibilityInvitation" id="iconSideFlecheUp">keyboard_arrow_up</mat-icon> 
+                </button>
+
+            </mat-list-item>
+
+            <app-invitation-list *ngIf="visibilityInvitation"></app-invitation-list>
+
+
+            <mat-list-item>
+        
+                <div class="btnSide"> CONTACTS </div>
+
+                <button mat-icon-button class="accordion" (click)="afficheContacts()">
+                    <mat-icon *ngIf="!visibilityContact" id="iconSideFleche">keyboard_arrow_down</mat-icon> 
+                    <mat-icon *ngIf="visibilityContact" id="iconSideFlecheUp">keyboard_arrow_up</mat-icon> 
+                </button>
+
+            </mat-list-item>
+        
+            <app-contact-list *ngIf="visibilityContact"></app-contact-list>
+
+
+            <mat-list-item>
+
+                <div class="btnSide"> DISCUSSIONS </div>
+
+                <button mat-icon-button class="accordion" (click)="afficheDiscussions()">
+                    <mat-icon *ngIf="!visibilityDiscussion" id="iconSideFleche">keyboard_arrow_down</mat-icon> 
+                    <mat-icon *ngIf="visibilityDiscussion" id="iconSideFlecheUp">keyboard_arrow_up</mat-icon> 
+                </button>
+
+            </mat-list-item>
+
+            <app-discussions-list *ngIf="visibilityDiscussion"></app-discussions-list>
+    
+
+        </mat-list>
+
+    </mat-sidenav>
+
+
+    <div *ngIf="!service.isLogged()">
+        <span>Vous n'êtes pas connecté, cliquer </span>
+            <a routerLink="/login">ici</a>
+        <span> pour vous identifier.</span>
+    </div>
+
+
+    <div *ngIf="service.isLogged()">
+        <app-message-list></app-message-list>
+        <!--app-connected-people-list></app-connected-people-list-->
+        <app-new-message-form></app-new-message-form>
+    </div>
+
+
+</mat-sidenav-container>

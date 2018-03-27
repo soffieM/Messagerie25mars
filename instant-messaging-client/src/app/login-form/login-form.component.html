@@ -8,7 +8,7 @@
   
   <p> </p>
   
-  <!--<form layout="row">  -->
+  <form layout="row"> 
     <span flex></span>
     <div class="ensemble" layout="column">
       <div>
@@ -26,24 +26,17 @@
       
       <div class="buttonLog">
           <p> </p>
-          <button class="mat-primary mat-raised" (click)="goBack()"> Annuler </button> 
           <button class="mat-primary mat-raised" (click)="send()"> Valider </button> 
       </div>
     </div> 
     <span flex></span>
-  <!--</form>-->
+</form>
+
+<p></p>
+<nav id="foot">
+    <span> Vous n'êtes pas encore inscrit ?</span><p><a routerLink="/subscribe"> Je m'inscris !</a></p>
+    <p> Mot de passe oublié ? </p>
+</nav>
+<!--</form>-->
 </mat-card> 
 
-<!--<div class="login-form">
-  <label>Login:</label>
-  <input class="login-input" type="text" [(ngModel)]="username" (keyup.enter)="send()"/>
-  <p></p>
-  <label>Mot de passe: </label>
-  <input class="password-input" type="password" [(ngModel)]="password" (keyup.enter)="send()"/>
-  <div>
-    <p></p>
-    <button (click)="goBack()">Annuler</button>
-    <button (click)="send()">Valider</button>
-  </div>
-</div>
--->
