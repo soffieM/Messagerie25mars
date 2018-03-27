@@ -143,11 +143,9 @@ class DbModel {
             return user[0].username;
         });
     }
-    createDiscussion(usernameSender, idContact) {
+    createDiscussion(iDSender, idContact) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('on entre dans la fonction dbModel createDiscussion');
-            const iDSender = yield this.getUserId(usernameSender);
-            //const iDReceiver = await this.getUserId(usernameReceiver);
             const id_discussion = yield this.getCountersIdwithIncrementation('idIncrementDiscussion');
             yield this.database.collection('Discussions')
                 .insertOne({ _id: id_discussion[0].sequence_value, users: [iDSender, idContact], history: [] });
@@ -155,11 +153,10 @@ class DbModel {
             return id_discussion[0].sequence_value;
         });
     }
-    addDiscussionIdToUser(username, id_discussion) {
+    addDiscussionIdToUser(userId, id_discussion) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = yield this.getUserId(username);
             yield this.database.collection('users')
-                .update({ _id: id }, { $push: { id_discussion: { id: id_discussion } } });
+                .update({ _id: userId }, { $push: { id_discussion: { id: id_discussion } } });
         });
     }
     deleteDiscussionFromUser(userId, id_discussion) {

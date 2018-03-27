@@ -156,18 +156,17 @@ export class Client {
         this.server.broadcastContact(dest, this.username);
     }
 
-    async onCreateDiscussion(contact: string) {
-        console.log('client.ts on entre dans la fonction onCreateDiscussion avec ' + this.username + '' + contact);
-        const id = await this.db.createDiscussion(this.username, contact);
+    async onCreateDiscussion(contactId: string) {
+        console.log('client.ts on entre dans la fonction onCreateDiscussion avec ' + this.username + '' + contactId);
+        const id = await this.db.createDiscussion(this.userId, contactId);
         
         this.onFetchDiscussion(id);
-        console.log('a chargé la disc ' + id +'; client.ts onCreateDiscussion ' + contact + ' terminé' );
-        await this.db.addDiscussionIdToUser(this.username, id);
-        console.log('a ajouté la discussion'  + id + 'à ' + this.username)
-
-        //this.server.broadcastCreateDiscussion(contact, id);
-        //await this.db.addDiscussionIdToUser(contact, id);
-        console.log('n a pas ajouté la discussion'  + id + 'à ' + contact)
+        console.log('a chargé la disc ' + id +'; client.ts onCreateDiscussion ' + contactId + ' terminé' );
+        await this.db.addDiscussionIdToUser(this.userId, id);
+        console.log('a ajouté la discussion '  + id + ' à ' + this.userId)
+        this.server.broadcastCreateDiscussion(contactId, id);
+        console.log('a ajouté la discussion '  + id + ' à ' + contactId);
+        this.sendDiscussionsList(this.userId);
     }
 
     async onFetchDiscussion(id: string) {

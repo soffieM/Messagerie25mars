@@ -127,21 +127,18 @@ export class DbModel {
         return user[0].username;
     }
 
-    async createDiscussion(usernameSender: string, idContact: string): Promise<any> {
+    async createDiscussion(iDSender: string, idContact: string): Promise<any> {
         console.log('on entre dans la fonction dbModel createDiscussion');
-        const iDSender = await this.getUserId(usernameSender);
-        //const iDReceiver = await this.getUserId(usernameReceiver);
-        const id_discussion = await this.getCountersIdwithIncrementation('idIncrementDiscussion');
+         const id_discussion = await this.getCountersIdwithIncrementation('idIncrementDiscussion');
         await this.database.collection('Discussions')
         .insertOne({_id:id_discussion[0].sequence_value, users:[iDSender, idContact], history:[]});  
         console.log('dbModel id_discussion' +id_discussion[0].sequence_value +'créée');
         return id_discussion[0].sequence_value;
     }
 
-    async addDiscussionIdToUser(username: string, id_discussion: string): Promise<void> {
-        const id = await this.getUserId(username);
+    async addDiscussionIdToUser(userId: string, id_discussion: string): Promise<void> {
         await this.database.collection('users')
-        .update({_id : id}, {$push: {id_discussion:{id: id_discussion}}});
+        .update({_id : userId}, {$push: {id_discussion:{id: id_discussion}}});
     }
 
     async deleteDiscussionFromUser(userId, id_discussion: string):Promise <void> {

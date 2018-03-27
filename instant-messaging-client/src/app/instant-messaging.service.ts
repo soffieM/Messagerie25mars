@@ -72,6 +72,8 @@ export class InstantMessagingService {
   }
 
   private onDiscussionList(discussionsList: DiscussionsListItem[]) {
+    this.discussionsListId = [];
+    this.discussionsListName = [];
     console.log('discussionsList obtenu onDiscussion ' + discussionsList);
     for (let i = 0; i < discussionsList.length; i++) {
       const participantsId: string[] = [];
