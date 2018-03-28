@@ -1,9 +1,9 @@
 .message-list {
-    position:fixed; 
-    top:15%; 
-    bottom: 50px;
-    left:200px;
-    right:0px;
-    padding:5px;
-    overflow-y: scroll;
+    position: relative;
+    left: 0%;
+    top: 10%;
+    right: auto;
+    bottom: auto;
+    width: 100%;
+    padding: 25px;
 }

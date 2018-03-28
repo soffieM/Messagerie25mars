@@ -14,17 +14,18 @@ button::-moz-focus-inner {
 .mat-toolbar {
     position: relative;
     background-color: #0B3C5D;
+    z-index: 1;
 }
 
 .mat-icon {
     color: white;
 }
 
-/*
+
 #avatar {
-    padding: 10px;
+    padding-bottom: 37px;
 }
-*/
+
 
 #nom {
     padding: 10px;
@@ -44,7 +45,7 @@ button::-moz-focus-inner {
   }
 
 #barreGauche {
-    width: 30%;
+    width: 25%;
     background-color: #0B3C5D;
 }
 
@@ -55,4 +56,18 @@ button::-moz-focus-inner {
     text-align: left;
     padding: 10px;
     font-weight: bold;
+}
+
+#participants {
+    background-color:#1D2731;
+    opacity: 0.5;
+    margin-left: 25%;
+    width: 75%;
+    padding-left: 25px;
+    color: white;
+}
+
+#listeParticipants {
+    position: relative;
+    left: 5%;
 }

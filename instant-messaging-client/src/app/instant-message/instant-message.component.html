@@ -1,73 +1,56 @@
-<div class="ensemble">
+<div class="group">
 
-  <table>
-
-    <tr></tr>
-
-    <tr *ngIf="messAuto()==true" class="messAut">
+  <div class="floatbox" *ngIf="messAuto()==true" class="bulle" id="messAut">
       <p>
         <b>{{message.content}}</b> ({{message.date | date: "'le ' dd MMMM yyyy 'à ' HH:mm"}})
-      </p>
-    </tr>
-
-    <tr></tr>
-
-    <tr *ngIf="emis()==true" class="bulle" id="emission">
-
-      <mat-card class="messageCard">
-
-        <mat-card-title class="messageTitle">
-          {{message.author}} a écrit :
-        </mat-card-title>
-        
-        <mat-divider class="sep1" [inset]=true></mat-divider>
-
-        <mat-card-content class="messageItself">
-          {{message.content}} 
-        </mat-card-content>
-
-        <mat-divider class="sep2" [inset]=true></mat-divider>
-
-        <mat-card-footer class="messageDate">
-          {{message.date | date: "'le ' dd MMMM yyyy 'à ' HH:mm"}} 
-        </mat-card-footer>
-
-      </mat-card>
-
-    </tr>
-
-    <tr></tr>
-
-    <tr *ngIf="emis()!=true && messAuto()!=true" class="bulle" id="reception">
-
-      <td></td>
-
-      <td>
-
-        <mat-card class="messageCard2">
-        
+      </p>    
+  </div>
+  
+  <div class="floatbox">
+      <mat-card *ngIf="emis()==true" class="bulle" id="emission">
+  
           <mat-card-title class="messageTitle">
-            {{message.author}} a écrit:
+            {{message.author}} a écrit :
           </mat-card-title>
           
           <mat-divider class="sep1" [inset]=true></mat-divider>
-        
+  
           <mat-card-content class="messageItself">
             {{message.content}} 
           </mat-card-content>
-        
+  
           <mat-divider class="sep2" [inset]=true></mat-divider>
-        
+  
           <mat-card-footer class="messageDate">
             {{message.date | date: "'le ' dd MMMM yyyy 'à ' HH:mm"}} 
           </mat-card-footer>
-        
+  
         </mat-card>
-
-      </td>
-
-    </tr>
-
-  </table>
-
-</div>
+  </div>
+  
+      <div class="floatbox" id="recu">
+          <mat-card *ngIf="emis()!=true && messAuto()!=true" class="bulle" id="reception">
+          
+            <mat-card-title class="messageTitle">
+              {{message.author}} a écrit:
+            </mat-card-title>
+            
+            <mat-divider class="sep1" [inset]=true></mat-divider>
+          
+            <mat-card-content class="messageItself">
+              {{message.content}} 
+            </mat-card-content>
+          
+            <mat-divider class="sep2" [inset]=true></mat-divider>
+          
+            <mat-card-footer class="messageDate">
+              {{message.date | date: "'le ' dd MMMM yyyy 'à ' HH:mm"}} 
+            </mat-card-footer>
+          
+          </mat-card>
+  
+        </div>
+  
+  <p></p>
+  
+  </div>

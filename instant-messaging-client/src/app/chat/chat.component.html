@@ -1,6 +1,6 @@
 <mat-toolbar>
 
-    <mat-toolbar-row>
+    <mat-toolbar-row id="premiere">
 
         <span id="nom"> {{service.getUserName()}} </span>
 
@@ -9,8 +9,11 @@
         <button mat-icon-button [matMenuTriggerFor]="appMenu">
             <mat-icon id="iconToolbarFleche">keyboard_arrow_down</mat-icon>
         </button>
+   
+    </mat-toolbar-row>
 
-    
+    <mat-toolbar-row id="participants"> <mat-icon id="particip">people</mat-icon>
+        <span id="listeParticipants"> {{service.getDiscussionsListName()[2].participantsName}} </span>
     </mat-toolbar-row>
     
 </mat-toolbar>
@@ -88,7 +91,6 @@
     <div *ngIf="service.isLogged()">
         <app-message-list></app-message-list>
         <!--app-connected-people-list></app-connected-people-list-->
-        <app-new-message-form></app-new-message-form>
     </div>
 
 

@@ -35,5 +35,4 @@ export class ChatComponent implements OnInit {
     this.visibilityDiscussion = !this.visibilityDiscussion;
   }
 
-
 }
