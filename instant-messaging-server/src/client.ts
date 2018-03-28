@@ -169,13 +169,10 @@ export class Client {
     async onCreateDiscussion(contactId: string) {
         console.log('client.ts on entre dans la fonction onCreateDiscussion avec ' + this.username + '' + contactId);
         const id = await this.db.createDiscussion(this.userId, contactId);
-        
         this.onFetchDiscussion(id);
         console.log('a chargé la disc ' + id +'; client.ts onCreateDiscussion ' + contactId + ' terminé' );
         await this.db.addDiscussionIdToUser(this.userId, id);
-        console.log('a ajouté la discussion '  + id + ' à ' + this.userId)
         this.server.broadcastCreateDiscussion(contactId, id);
-        console.log('a ajouté la discussion '  + id + ' à ' + contactId);
         this.sendDiscussionsList();
     }
 
@@ -191,14 +188,16 @@ export class Client {
         console.log('client.ts ajout participant a la discussion ' + id);
         await this.db.addDiscussionIdToUser(contactId, id);
         await this.db.addParticipantInDiscussion(id, contactId);
-        this.server.broadcastFetchDiscussion(id);
+        this.sendDiscussionsList();
+        this.server.broadcastUpdateDiscussionList(contactId, id);
     }
 
     async onQuitDiscussion(id: string) {
         console.log(this.userId + 'quitte discussion' + id);
-        await this.db.deleteParticipantFromDiscussion(this.userId, id);
-        await this.db.deleteDiscussionFromUser(id, this.userId)
-        this.server.broadcastFetchDiscussion(id);
+        await this.db.deleteParticipantFromDiscussion(id, this.userId);
+        await this.db.deleteDiscussionFromUser(this.userId, id);
+        this.sendDiscussionsList();
+        this.server.broadcastUpdateDiscussionList(this.userId, id);
     }
 
     private onMessage(utf8Data: string): void {

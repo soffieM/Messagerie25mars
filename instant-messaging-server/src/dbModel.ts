@@ -144,7 +144,7 @@ export class DbModel {
     }
 
     async deleteDiscussionFromUser(userId, id_discussion: string):Promise <void> {
-        await this.database.collection('users').update({_id : userId}, {$pull: {id_discussion:id_discussion}});
+        await this.database.collection('users').update({_id : userId}, {$pull: {id_discussion:{id: id_discussion}}});
     }
 
     async addParticipantInDiscussion(id_discussion: string, userId): Promise <void> {

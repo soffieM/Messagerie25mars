@@ -159,7 +159,7 @@ class DbModel {
     }
     deleteDiscussionFromUser(userId, id_discussion) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this.database.collection('users').update({ _id: userId }, { $pull: { id_discussion: id_discussion } });
+            yield this.database.collection('users').update({ _id: userId }, { $pull: { id_discussion: { id: id_discussion } } });
         });
     }
     addParticipantInDiscussion(id_discussion, userId) {

@@ -60,6 +60,15 @@ class Server {
             }
         });
     }
+    broadcastUpdateDiscussionList(userId, discussionId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const participants = yield this.db.getParticipants(discussionId);
+            for (const client of this.clients) {
+                if (!(participants.indexOf(client.getUserId()) == -1))
+                    client.sendDiscussionsList();
+            }
+        });
+    }
     broadcastFetchDiscussion(discussionId) {
         return __awaiter(this, void 0, void 0, function* () {
             const participants = yield this.db.getParticipants(discussionId);

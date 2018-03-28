@@ -15,11 +15,10 @@ export class ContactListComponent {
 
   private onSelect(contact: UserIdAndName) {
     this.service.askDiscussion(contact.userId);
-    console.log('clique sur ' + contact.userId);
   }
 
-  private addParticipant(contact: string) {
-    this.service.sendAddParticipant(contact);
+  private addParticipant(contactId: string) {
+    console.log('poubelle' + contactId);
+    this.service.sendAddParticipant(contactId);
   }
-
 }

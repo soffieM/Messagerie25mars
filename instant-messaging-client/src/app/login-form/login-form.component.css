@@ -51,6 +51,15 @@ app-root{
     padding: 20px;
 }
 
-#foot {
-    font-size: 80%;
+.mail-form {
+    position:fixed;
+    width:300px;
+    height:140px;
+    margin-left: -150px;
+    margin-top: -80px;
+    left: 50%;
+    top: 50%;
+    border: none;
+    vertical-align:middle;
+    padding: 20px;
 }

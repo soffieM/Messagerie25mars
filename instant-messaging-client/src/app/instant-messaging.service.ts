@@ -232,8 +232,9 @@ export class InstantMessagingService {
     this.invitations.splice(index, 1);
   }
 
-  public sendAddParticipant(contact: string) {
-    const addParticipant = {id: this.currentDiscussion.id, contact: contact};
+  public sendAddParticipant(contactId: string) {
+    console.log('ajoute à discussion ' + this.currentDiscussion.id + ' lecontact ' + contactId)
+    const addParticipant = {id: this.currentDiscussion.id, contact: contactId};
     this.sendMessage('addParticipant', addParticipant);
   }
 

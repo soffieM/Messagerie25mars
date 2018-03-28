@@ -52,6 +52,14 @@ export class Server {
         }     
     }
 
+    async broadcastUpdateDiscussionList(userId, discussionId){
+        const participants = await this.db.getParticipants(discussionId);
+        for (const client of this.clients){
+            if (!(participants.indexOf(client.getUserId()) == -1))
+                client.sendDiscussionsList();
+        }  
+    }
+
     async broadcastFetchDiscussion(discussionId){
         const participants = await this.db.getParticipants(discussionId);
         for (const client of this.clients){

@@ -187,9 +187,7 @@ class Client {
             this.onFetchDiscussion(id);
             console.log('a chargé la disc ' + id + '; client.ts onCreateDiscussion ' + contactId + ' terminé');
             yield this.db.addDiscussionIdToUser(this.userId, id);
-            console.log('a ajouté la discussion ' + id + ' à ' + this.userId);
             this.server.broadcastCreateDiscussion(contactId, id);
-            console.log('a ajouté la discussion ' + id + ' à ' + contactId);
             this.sendDiscussionsList();
         });
     }
@@ -207,15 +205,17 @@ class Client {
             console.log('client.ts ajout participant a la discussion ' + id);
             yield this.db.addDiscussionIdToUser(contactId, id);
             yield this.db.addParticipantInDiscussion(id, contactId);
-            this.server.broadcastFetchDiscussion(id);
+            this.sendDiscussionsList();
+            this.server.broadcastUpdateDiscussionList(contactId, id);
         });
     }
     onQuitDiscussion(id) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log(this.userId + 'quitte discussion' + id);
-            yield this.db.deleteParticipantFromDiscussion(this.userId, id);
-            yield this.db.deleteDiscussionFromUser(id, this.userId);
-            this.server.broadcastFetchDiscussion(id);
+            yield this.db.deleteParticipantFromDiscussion(id, this.userId);
+            yield this.db.deleteDiscussionFromUser(this.userId, id);
+            this.sendDiscussionsList();
+            this.server.broadcastUpdateDiscussionList(this.userId, id);
         });
     }
     onMessage(utf8Data) {

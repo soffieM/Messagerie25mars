@@ -19,7 +19,7 @@ export class DiscussionsListComponent {
   }
 
   private quitDiscussion(discussionId: string) {
-    console.log("poubelle" + discussionId);
+    console.log('poubelle' + discussionId);
     this.service.sendQuitDiscussion(discussionId);
   }
 }
