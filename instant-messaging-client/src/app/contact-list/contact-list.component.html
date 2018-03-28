@@ -5,7 +5,7 @@
       <mat-button-toggle-group>
 
           <mat-button-toggle [class.selected]="contact === selectedContact" (click)="onSelect(contact)">
-          {{contact}}
+          {{contact.username}}
           </mat-button-toggle>
 
           <button class="addP" (click)="addParticipant(discussion.id)">

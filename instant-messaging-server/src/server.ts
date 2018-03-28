@@ -34,18 +34,20 @@ export class Server {
         }
     }
     
-    public broadcastContact(dest: string , username: string ){
+    async sendFriendContactsList (friend: string){
         for(const client of this.clients){
-            if (client.getUserName() === dest)
-               client.sendContact(dest, username);
+            if (client.getUserName() === friend){
+                client.sendContactsList();
+            }
         }
     } 
 
     async broadcastCreateDiscussion(contactId, discussionId){
         for(const client of this.clients){
             if (client.getUserId() === contactId){
+                client.sendDiscussionsList();
+                console.log('mise à jour discussion ' + discussionId);
                 await this.db.addDiscussionIdToUser(contactId, discussionId);
-                client.sendDiscussionsList(contactId);
             }
         }     
     }
