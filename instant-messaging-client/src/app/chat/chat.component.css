@@ -14,30 +14,21 @@ button::-moz-focus-inner {
 .mat-toolbar {
     position: relative;
     background-color: #0B3C5D;
-    z-index: 1;
 }
 
 .mat-icon {
     color: white;
 }
 
-
 #avatar {
     padding-bottom: 37px;
 }
-
 
 #nom {
     padding: 10px;
     color: white;
     font-style: italic;
 }
-
-/*
-#iconToolbarFleche {
-    padding: 10px;
-}
-*/
 
 .menuSide {
     position: relative;
@@ -67,7 +58,6 @@ button::-moz-focus-inner {
     color: white;
 }
 
-#listeParticipants {
-    position: relative;
-    left: 5%;
+#particip {
+    padding-left: 10px;
 }

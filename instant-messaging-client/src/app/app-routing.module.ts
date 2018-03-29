@@ -17,7 +17,7 @@ const routes: Routes = [
   { path: 'subscribe', component: SubscribeFormComponent },
   { path: 'chat', component: ChatComponent },
   { path: 'error', component: ErrorComponent },
-  { path: 'profil', component: ProfilComponent }
+  { path: 'profil', component: ProfilComponent },
   { path: 'about', component: AboutComponent }
 
 ];

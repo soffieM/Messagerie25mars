@@ -20,5 +20,5 @@ body {
     font-family: 'Times New Roman', Times, serif;
     font-size: 20px;
     flex-direction: column;
-    background-color: transparent;
+    background-color: lightgrey;
 }

@@ -1,56 +1,58 @@
-#bar {
+.group {
+    position: fixed;
+    top: 10%;
+    width: 100%;
+}    
+
+#titre {
     color: white;
     justify-content: center;
+    background-color:  #0B3C5D;
 }
 
-.buttonLog {
+.material-icons {
+    color: #0B3C5D;
+}
+
+.formulaire {
+    position: relative;
+    padding-top: 25px;
+}
+
+.val {
     text-align: center;
 }
-    
-.ensemble {
-    text-align: center;
+
+#btn {
+    padding-left: 25px;
+    padding-right: 25px;
+    width: 75%;
 }
 
 mat-card {
-    margin-top: 150px;
-    max-width: 25%;
+    width: 25%;
     text-align: center;
     margin-left: auto;
     margin-right: auto;
 }
 
-app-root{
-    margin-left: middle;
-    margin-right: middle;
-    vertical-align: middle;
-}
-
-.password-form {
-    position:fixed;
-    width:300px;
-    height:140px;
-    margin-left: -150px;
-    margin-top: -80px;
-    left: 50%;
-    top: 50%;
-    border: none;
-    vertical-align:middle;
-    padding: 20px;
-}
-
-.login-form {
-    position:fixed;
-    width:300px;
-    height:140px;
-    margin-left: -150px;
-    margin-top: -80px;
-    left: 50%;
-    top: 50%;
-    border: none;
-    vertical-align:middle;
-    padding: 20px;
-}
-
 #foot {
     font-size: 80%;
+    padding-top: 25px;
+}
+
+#inscription {
+    position: relative;
+    padding-top: 25px;
+}
+
+mat-button-toggle {
+    margin-left: 37.5%;
+    width: 25%;
+    color: white;
+    background-color: #1D2731;
+}
+
+#propos {
+    width: 100%;
 }

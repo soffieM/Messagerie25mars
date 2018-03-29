@@ -21,7 +21,7 @@ mat-divider {
 
 mat-button-toggle {
   background-color: transparent;
-  color: white;
+  color: black;
   width: 100%;
   border: none;
   outline:0;
@@ -29,10 +29,11 @@ mat-button-toggle {
   background-image: none;
   -webkit-box-shadow: none;
   box-shadow: none;
+  font-size: 90%;
 }
 
 mat-button-toggle:hover {
-  color: white;
+  color: black;
   background-color: #328CC1;
   border: none;
   outline: 0;
