@@ -5,34 +5,39 @@
   <mat-toolbar id="titre" layout-align="center center">
       <h2> LOGIN </h2>
   </mat-toolbar>
+
+  <p> </p>
   
- 
-<form class="formulaire"> 
-
-  <div>
-    <mat-icon class="material-icons">person</mat-icon>
-    <mat-input-container class="fullwidth">
-      <input matInput name="log" placeholder="Nom d'utilisateur" class="login-input" type="text" [(ngModel)]="username" (keyup.enter)="send()"/>
-    </mat-input-container>
-  </div>
-
-  <div>
-    <mat-icon class="material-icons" color="primary">lock</mat-icon>
-    <mat-input-container class="fullwidth">
-      <input matInput name="pass" placeholder="Mot de passe" class="password-input" type="password" [(ngModel)]="password" (keyup.enter)="send()">
-    </mat-input-container>
-  </div>
+  <!--<form layout="row"> -->
+    <span flex></span>
+    <div class="ensemble" layout="column">
+      <div>
+        <mat-icon class="material-icons" color="primary">person</mat-icon>
+        <mat-input-container class="fullwidth">
+          <input matInput name="log" placeholder="Nom d'utilisateur" class="login-input" type="text" [(ngModel)]="username" (keyup.enter)="send()"/>
+        </mat-input-container>
+      </div>
+      <div>
+        <mat-icon class="material-icons" color="primary">lock</mat-icon>
+        <mat-input-container class="fullwidth">
+          <input matInput name="pass" placeholder="Mot de passe" class="password-input" type="password" [(ngModel)]="password" (keyup.enter)="send()">
+        </mat-input-container>
+      </div>
       
-  <div class="val">
-    <button id="btn" (click)="send()"> Valider </button> 
-  </div>
-
-</form>
+      <div class="buttonLog">
+          <p> </p>
+          <button class="mat-primary mat-raised" (click)="goBack()"> Annuler </button>
+          <button class="mat-primary mat-raised" (click)="send()"> Valider </button>
+      </div> 
+    </div> 
+    <span flex></span>
+<!--</form>-->
 
 <nav id="foot">
     <span id="inscription"> Vous n'êtes pas encore inscrit ?</span><p><a routerLink="/subscribe"> Je m'inscris !</a></p>
     <p> Mot de passe oublié ? </p>
 </nav>
+
 </mat-card> 
 
 <mat-button-toggle routerLink="/about">

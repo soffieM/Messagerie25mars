@@ -18,36 +18,29 @@ export class Client {
         const message = {type: type, data: data};
         this.connection.send(JSON.stringify(message));
     }
-   
-    public sendUsersList(content: string[]) {
-        const users_list = content;
-        this.sendMessage('users_list', users_list);
-    }
 
     public sendInstantMessage(content: string, author: string, date: Date) {
         const instantMessage = { content: content, author: author, date: date };
         this.sendMessage('instant_message', instantMessage);
     }
 
-    async sendOwnUser(username: string){
-        const userId = this.userId;
-        const invitations = 
-        await this.db.getContactsOrInvitationsOrDiscussionFromUserCollection('invitations', username);
-        const con = 
-        await this.db.getContactsOrInvitationsOrDiscussionFromUserCollection('contacts', username);
-        const contacts: string[] = [];
-        for (let i = 0; i < con.length; i++){
-            contacts[i] = con[i].idUser;
-            console.log('contact = '+contacts[i])
-        }
-        const discussions: string[] = await this.db.getContactsOrInvitationsOrDiscussionFromUserCollection('id_discussion', username);
-        const dataUser = {userId, username, invitations, contacts, discussions};
-        this.sendMessage('ownUser', dataUser);
+    public sendUsersList(content: string[]) {
+        const users_list = content;
+        this.sendMessage('users_list', users_list);
     }
 
-    async sendDiscussionsList(userId: string){
+    async sendOwnUser(){
+        const userId = this.userId;
+        const username = this.username;
+        const dataUser = {userId, username};
+        this.sendMessage('ownUser', dataUser);
+        await this.sendDiscussionsList(); // redondant avec onUserLogin
+        await this.sendContactsList(); // redondant avec onUserLogin
+    }
+
+    async sendDiscussionsList(){
         const discussions = 
-        await this.db.getContactsOrInvitationsOrDiscussionFromUserCollection('id_discussion', this.username);
+        await this.db.getElementsFromUser('id_discussion', this.username);
         const discussionsList: any[] =[];
         for (let i = 0; i < discussions.length; i++){
             const id = discussions[i].id;
@@ -56,30 +49,34 @@ export class Client {
             for (let i = 0; i < participantsComplet.length; i++){
                 const userId = participantsComplet[i];
                 const username = await this.db.getUsername(userId);
-                console.log('on ajoute participant = '+ userId +'de nom = '+username + 'discussion = '+id);
+                console.log('on ajoute participant = '+ userId +' de nom = '+username + ' discussion = '+id);
                 participants.push({userId, username});
             }
             discussionsList.push({id, participants});
         }
-        console.log('discussionsList'+ discussionsList)
+        console.log('discussionsList'+ discussionsList);
         this.sendMessage('discussionsList', discussionsList);
     }
 
-    async sendInvitation(dest : string, username: string){
-        if (dest===username)return;
-        const invitation = [dest, username];
-        this.sendMessage('invitation', invitation);
-        const usernameInvitations = await this.db.getContactsOrInvitationsOrDiscussionFromUserCollection ('invitations', this.username);
-        const id_dest = await this.db.getUserId(dest);
-
-        const b = await this.db.verifyIfExistInContact_Invitation('invitations', username, dest);
-        if (b ===0) {
-            await this.db.addContactsOrInvitationsInUsersCollection ("invitations", username, dest);
+    async sendContactsList(){
+        const contacts = 
+        await this.db.getElementsFromUser('contacts', this.username);
+        const contactsList: any[] =[];
+        for (let i = 0; i < contacts.length; i++){
+            const userId = contacts[i].idUser;
+            const username = await this.db.getUsername(userId);
+            contactsList.push({userId, username});
         }
+            console.log('contactsList'+ contactsList)
+        this.sendMessage('contactsList', contactsList);
     }
 
-    public sendContact(dest: string , username: string ) {
-       const contact = [dest, username];
+    async sendInvitation(dest : string, username: string){
+        const invitation = [dest, username];
+        this.sendMessage('invitation', invitation); 
+    }
+
+    public sendContact(contact: any) {
        this.sendMessage('contact', contact);
     }
   
@@ -98,10 +95,10 @@ export class Client {
             this.username = username;
             this.sendMessage('login', 'ok');
             this.userId = await this.db.getUserId(username);
-            console.log("userid " + this.userId);
-            this.sendOwnUser(username);
-            this.sendDiscussionsList(this.userId);
-
+            console.log('userid' + this.userId);
+            this.sendOwnUser();
+            this.sendDiscussionsList();
+            this.sendContactsList();
             this.server.broadcastUsersList();
             this.server.broadcastUserConnection('connection', username); 
             }
@@ -133,40 +130,50 @@ export class Client {
         this.server.broadcastInstantMessage(discussionId, content, this.username, participants);
     }
 
-    private onInvitation(dest){
-        this.server.broadcastInvitation(dest, this.username);
+    async  onInvitation(dest){
+        if (dest === this.username)return;
+           const usernameInvitations = await this.db.getElementsFromUser ('invitations', this.username);
+           const id_dest = await this.db.getUserId(dest);
+   
+           const b = await this.db.verifyIfExistInContact_Invitation('invitations',  dest, this.username);
+           const c = await this.db.verifyIfExistInContact_Invitation('contacts', this.username, dest);
+           if (b ===0 && c ===0) {
+               await this.db.addContactsOrInvitationsInUsersCollection ("invitations", dest , this.username);
+           }
+           console.log('invitation dest ='+dest);
+           console.log('invitation username ='+this.username);
+           this.server.broadcastInvitation(dest, this.username);
     }
 
     async removeInvitation(invitation){
         this.sendMessage('removeInvitation', invitation);
-        await this.db.deleteInvitationsOrContacts ('invitation', invitation, this.username);
+        await this.db.deleteInvitationsOrContacts ('invitation',this.username , invitation);
     }
 
-    async onOkInvitation(contact){
-        const okInvitation = contact;
-        this.sendMessage( 'okInvitation', okInvitation);
+    async removeContact(contact){
+        this.sendMessage('removeContact', contact);
+        await this.db.deleteInvitationsOrContacts ('contacts', contact, this.username);
+        await this.db.deleteInvitationsOrContacts ('contacts', this.username, contact);
     }
 
-    async onContact(dest) {
-        const b = await this.db.verifyIfExistInContact_Invitation('contacts', this.username, dest);
+    async onContact(friend) {
+        const b = await this.db.verifyIfExistInContact_Invitation('contacts', this.username, friend);
         if (b === 0){
-            await this.db.addContactsOrInvitationsInUsersCollection ("contacts", this.username, dest);
-            await this.db.addContactsOrInvitationsInUsersCollection ("contacts", dest, this.username);         
+            await this.db.addContactsOrInvitationsInUsersCollection ("contacts", this.username, friend);
+            await this.db.addContactsOrInvitationsInUsersCollection ("contacts", friend, this.username);       
         }
-        this.server.broadcastContact(dest, this.username);
+        this.sendContactsList();
+        this.server.sendFriendContactsList(friend);
     }
 
     async onCreateDiscussion(contactId: string) {
         console.log('client.ts on entre dans la fonction onCreateDiscussion avec ' + this.username + '' + contactId);
         const id = await this.db.createDiscussion(this.userId, contactId);
-        
         this.onFetchDiscussion(id);
         console.log('a chargé la disc ' + id +'; client.ts onCreateDiscussion ' + contactId + ' terminé' );
         await this.db.addDiscussionIdToUser(this.userId, id);
-        console.log('a ajouté la discussion '  + id + ' à ' + this.userId)
         this.server.broadcastCreateDiscussion(contactId, id);
-        console.log('a ajouté la discussion '  + id + ' à ' + contactId);
-        this.sendDiscussionsList(this.userId);
+        this.sendDiscussionsList();
     }
 
     async onFetchDiscussion(id: string) {
@@ -181,14 +188,16 @@ export class Client {
         console.log('client.ts ajout participant a la discussion ' + id);
         await this.db.addDiscussionIdToUser(contactId, id);
         await this.db.addParticipantInDiscussion(id, contactId);
-        this.server.broadcastFetchDiscussion(id);
+        this.sendDiscussionsList();
+        this.server.broadcastUpdateDiscussionList(contactId, id);
     }
 
     async onQuitDiscussion(id: string) {
         console.log(this.userId + 'quitte discussion' + id);
-        await this.db.deleteParticipantFromDiscussion(this.userId, id);
-        await this.db.deleteDiscussionFromUser(id, this.userId)
-        this.server.broadcastFetchDiscussion(id);
+        await this.db.deleteParticipantFromDiscussion(id, this.userId);
+        await this.db.deleteDiscussionFromUser(this.userId, id);
+        this.sendDiscussionsList();
+        this.server.broadcastUpdateDiscussionList(this.userId, id);
     }
 
     private onMessage(utf8Data: string): void {
@@ -198,13 +207,14 @@ export class Client {
             case 'userSubscription': this.onUserSubscription(message.data.username, message.data.password, message.data.mail); break;
             case 'userLogin': this.onUserLogin(message.data.username, message.data.password); break;
             case 'invitation': this.onInvitation(message.data); break;
-            case 'okInvitation': this.onOkInvitation(message.data); break;
+            // case 'okInvitation': this.onOkInvitation(message.data); break;
             case 'removeInvitation': this.removeInvitation(message.data); break;
             case 'contact': this.onContact(message.data); break;
             case 'createDiscussion': this.onCreateDiscussion(message.data); break;
             case 'discussion': this.onFetchDiscussion(message.data); break;
             case 'addParticipant': this.onAddParticipant(message.data.discussionId, message.data.contactId); break;  
-            case 'quitDiscussion': this.onQuitDiscussion(message.data); break;  
+            case 'quitDiscussion': this.onQuitDiscussion(message.data); break;
+            case 'removeContact': this.removeContact(message.data); break;
        }
     }
 

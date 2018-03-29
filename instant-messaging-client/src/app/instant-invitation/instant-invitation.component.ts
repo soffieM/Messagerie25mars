@@ -18,7 +18,7 @@ export class InstantInvitationComponent  {
   }
 
   private onContact ():  void {
-    this.service.sendOkInvitation(this.invitation);
+//    this.service.sendOkInvitation(this.invitation);
     this.service.sendRemoveInvitation(this.invitation);
     this.service.sendContact(this.invitation);
     }

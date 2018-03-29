@@ -3,6 +3,7 @@ import { InstantMessagingService } from '../instant-messaging.service';
 import { DiscussionsListItem } from '../discussions-list-item';
 import { MatListModule } from '@angular/material/list';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { UserIdAndName } from '../user-id-and-name';
 
 @Component({
   selector: 'app-contact-list',
@@ -12,13 +13,12 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 export class ContactListComponent {
   constructor(private service: InstantMessagingService) { }
 
-  private onSelect(contact: string) {
-    this.service.askDiscussion(contact);
-    console.log('clique sur ' + contact);
+  private onSelect(contact: UserIdAndName) {
+    this.service.askDiscussion(contact.userId);
   }
 
-  private addParticipant(contact: string) {
-    this.service.sendAddParticipant(contact);
+  private addParticipant(contactId: string) {
+    console.log('poubelle' + contactId);
+    this.service.sendAddParticipant(contactId);
   }
-
 }

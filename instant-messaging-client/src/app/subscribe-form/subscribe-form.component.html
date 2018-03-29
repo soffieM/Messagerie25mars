@@ -1,43 +1,68 @@
-<div class="container">
-  <h1>Inscription</h1>
-      <form (ngSubmit)="onSubmit()" #subscribeForm="ngForm">
-        <div class="form-group">
-          <label for="username">Nom d'utilisateur</label>
-          <input type="text" class="form-control" id="name" required minlength="4" maxlength="20" [(ngModel)]="username" name="name" #name="ngModel">
-          <div *ngIf="name.invalid && (name.dirty || name.touched)"
-            class="alert alert-danger">
-            <div *ngIf="name.errors.required">
-              Nom d'utilisateur requis
-            </div>
-            <div *ngIf="name.errors.minlength">
-              Le nom d'utilisateur doit être de 5 caractères minimum.
-            </div>
+<mat-card>
+  <mat-toolbar id="bar" layout-align="center center" color="primary">
+    <div class="mat-toolbar-tools">
+       <h2> INSCRIPTION </h2>
+      <span flex></span>
+    </div>
+  </mat-toolbar>
+  
+  <p> </p>
+  
+  <!--<form layout="row">  -->
+    <span flex></span>
+    <div class="ensemble" layout="column">
+      <div>
+        <mat-icon class="material-icons" color="primary">person</mat-icon>
+        <mat-input-container class="fullwidth">
+          <input matInput name="log" placeholder="Nom d'utilisateur" class="login-input" type="text" [(ngModel)]="username" 
+          required pattern="[a-zA-Z0-9]{5,}" minlength="5" maxlength="20" #name="ngModel" (keyup.enter)="send()"/>
+        </mat-input-container>
+        <div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert alert-danger">
+          <div *ngIf="name.errors.required">
+            Nom d'utilisateur requis
           </div>
-        </div>
-
-        <div class="form-group">
-          <label for="password">Mot de passe</label>
-          <input type="password" class="form-control" id="password" required minlength="6" maxlength="12" [(ngModel)]="password" name="password" #pwd="ngModel">
-          <div *ngIf="pwd.invalid && (pwd.dirty || pwd.touched)"
-            class="alert alert-danger">
+          <div *ngIf="name.errors.minlength">
+            Le nom d'utilisateur doit être de 5 caractères minimum.
+          </div>
+          <div *ngIf="name.errors.pattern">
+            Le nom d'utilisateur ne doit contenir que des chiffres et des lettres.
+          </div>
+        </div>  
+      </div>
+      <div>
+        <mat-icon class="material-icons" color="primary">lock</mat-icon>
+        <mat-input-container class="fullwidth">
+          <input matInput name="pass" placeholder="Mot de passe" class="password-input" type="password" [(ngModel)]="password" 
+          required minlength="6" maxlength="12" #pwd="ngModel" (keyup.enter)="send()">
+          <div *ngIf="pwd.invalid && (pwd.dirty || pwd.touched)" class="alert alert-danger">
             <div *ngIf="pwd.errors.required">
               Mot de passe requis
             </div>
             <div *ngIf="pwd.errors.minlength">
               Le mot de passe doit être de 6 caractères minimum.
-           </div>
+            </div>
           </div>
-        </div>
-   
-        <div class="form-group">
-          <label for="mail">Adresse mail</label>
-          <input type="email" class="form-control" id="mail" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" [(ngModel)]="mail" name="mail" #mel="ngModel">
+        </mat-input-container>
+      </div>
+      <div>
+        <mat-icon class="material-icons" color="primary">mail_outine</mat-icon>
+        <mat-input-container class="fullwidth">
+          <input matInput name="email" placeholder="Adresse mail" class="mail-input" type="email" [(ngModel)]="mail" 
+          required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" [(ngModel)]="mail" #mel="ngModel">
           <div [hidden]="mel.valid || mel.pristine"
-               class="alert alert-danger">
-            Adresse mail requise
+           class="alert alert-danger">
+             Adresse mail requise
           </div>
-        </div>
-        <button (click)="goBack()">Annuler</button>
-        <button type="submit" class= "btn-success" [disabled]="!subscribeForm.form.valid">Envoyer</button>
-      </form>
-    </div>
+        </mat-input-container>
+      </div>
+
+      
+      <div class="buttonLog">
+          <p> </p>
+          <button class="mat-primary mat-raised" (click)="goBack()"> Annuler </button> 
+          <button class="mat-primary mat-raised" (click)="send()"> Valider </button> 
+      </div>
+    </div> 
+    <span flex></span>
+  <!--</form>-->
+</mat-card> 

@@ -28,7 +28,7 @@ class DbModel {
                 contacts: [], invitations: [], id_discussion: [] }); // attention TEST sur contact
         });
     }
-    getContactsOrInvitationsOrDiscussionFromUserCollection(contactOrInvitation, username) {
+    getElementsFromUser(contactOrInvitation, username) {
         return __awaiter(this, void 0, void 0, function* () {
             const id_user = yield this.getUserId(username);
             const userDocument = yield this.database.collection('users').find({ _id: id_user }).toArray();
@@ -67,7 +67,7 @@ class DbModel {
     }
     verifyIfExistInContact_Invitation(contactOrInvitation, usernameSender, usernameReceiver) {
         return __awaiter(this, void 0, void 0, function* () {
-            const t = yield this.getContactsOrInvitationsOrDiscussionFromUserCollection(contactOrInvitation, usernameSender);
+            const t = yield this.getElementsFromUser(contactOrInvitation, usernameSender);
             const j = yield this.getUserId(usernameReceiver);
             if (t.length === 0) {
                 return 0;
@@ -98,14 +98,12 @@ class DbModel {
             }
         });
     }
-    addInvitationsInUsersCollection(usernameSender, usernameReceiver) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const iDSender = yield this.getUserId(usernameSender);
-            const iDReceiver = yield this.getUserId(usernameReceiver);
-            yield this.database.collection('users')
-                .update({ _id: iDSender }, { $push: { invitations: { idUser: iDReceiver } } });
-        });
-    }
+    //async addInvitationsInUsersCollection (usernameSender: string, usernameReceiver: string): Promise<void> {
+    //const iDSender = await this.getUserId(usernameSender);
+    //const iDReceiver = await this.getUserId(usernameReceiver);
+    //await this.database.collection('users')
+    //.update({_id : iDSender}, {$push: {invitations:{idUser: iDReceiver}}});
+    //}
     getContactUser(username) {
         return __awaiter(this, void 0, void 0, function* () {
             const contact = yield this.database.collection('users').find({ username: username }).toArray();
@@ -161,7 +159,7 @@ class DbModel {
     }
     deleteDiscussionFromUser(userId, id_discussion) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this.database.collection('users').update({ _id: userId }, { $pull: { id_discussion: id_discussion } });
+            yield this.database.collection('users').update({ _id: userId }, { $pull: { id_discussion: { id: id_discussion } } });
         });
     }
     addParticipantInDiscussion(id_discussion, userId) {

@@ -17,7 +17,7 @@ export class InstantMessagingService {
   private logged: boolean;
   private errorMessage: string;
   private invitations: string[] = [];
-  private contacts: string [] = [];
+  private contacts: UserIdAndName[] = [];
   private discussionsList: string[]; // liste des numéros de discussion
   private discussionsListName: DiscussionParticipantsNames[] = []; // liste des numéros de discussion + nom des participants
   private discussionsListId: DiscussionParticipantsIds[] = []; // liste des numéros de discussion + id des participants
@@ -50,7 +50,7 @@ export class InstantMessagingService {
     console.log('arrivé dans service onFetchDiscussion, discussion ' + discussion.id);
     this.currentDiscussion = new Discussion (discussion.id, discussion.participants, discussion.history);
     console.log('changé currentDiscussion.id' + this.currentDiscussion.id + 'et participants ' + this.currentDiscussion.participants);
-    this.messages = this.currentDiscussion.history; // à supprimer après refactoring
+    this.messages = this.currentDiscussion.history;
   }
 
   private onInstantMessage(message: InstantMessage) {
@@ -66,15 +66,18 @@ export class InstantMessagingService {
   private onOwnUser(user: User) {
     this.user = user;
     this.invitations = user.invitations;
-    this.contacts = user.contacts;
-    this.discussionsList = [];
     console.log(this.user);
+  }
+
+  private onContactsList(ContactsList: UserIdAndName[]) {
+    this.contacts = ContactsList;
   }
 
   private onDiscussionList(discussionsList: DiscussionsListItem[]) {
     this.discussionsListId = [];
     this.discussionsListName = [];
-    console.log('discussionsList obtenu onDiscussion ' + discussionsList);
+    console.log('discussionsList obtenu onDiscussion');
+    console.log(discussionsList);
     for (let i = 0; i < discussionsList.length; i++) {
       const participantsId: string[] = [];
       const participantsName: string[] = [];
@@ -90,7 +93,8 @@ export class InstantMessagingService {
     this.discussionsListId.push({id, participantsId});
     this.discussionsListName.push({id, participantsName});
     }
-    console.log('discussionListId devient ' + this.discussionsListId);
+    console.log('discussionListId devient ');
+    console.log(this.discussionsListId);
     console.log('discussionListname devient ' + this.discussionsListName);
   }
 
@@ -107,15 +111,19 @@ export class InstantMessagingService {
       console.log(this.invitations);
   }
 
+  /*
   private onOkInvitation(contact: string  ) {
       this.contacts.push(contact);
       console.log(this.contacts);
   }
+  */
 
+  /*
   private onContact(contact: string[]) {
       this.contacts.push(contact[1]);
       console.log(this.contacts);
   }
+  */
 
   private onMessage(data: string) {
     const message = JSON.parse(data);
@@ -127,12 +135,14 @@ export class InstantMessagingService {
       case 'disconnection': this.onDisconnection(message.data); break;
       case 'subscription': this.onSubscription(message.data); break;
       case 'invitation': this.onInvitation(message.data); break;
-      case 'okInvitation': this.onOkInvitation(message.data); break;
+ //     case 'okInvitation': this.onOkInvitation(message.data); break;
       case 'removeInvitation': this.removeInvitation(message.data); break;
-      case 'contact': this.onContact(message.data); break;
+  //    case 'contact': this.onContact(message.data); break;
+      case 'removeContact': this.removeContact(message.data); break
       case 'discussion' : this.onFetchDiscussion(message.data); break;
       case 'ownUser': this.onOwnUser(message.data); break;
       case 'discussionsList': this.onDiscussionList(message.data); break;
+      case 'contactsList': this.onContactsList(message.data); break;
     }
   }
 
@@ -167,7 +177,7 @@ export class InstantMessagingService {
     return this.user.username;
   }
 
-  public getContacts(): string[] {
+  public getContacts(): UserIdAndName[] {
     return this.contacts;
   }
 
@@ -195,11 +205,11 @@ export class InstantMessagingService {
   public sendRemoveInvitation(invitation: string) {
     this.sendMessage('removeInvitation', invitation);
   }
-
+/*
   public sendOkInvitation (okInvitation: string ) {
     this.sendMessage('okInvitation', okInvitation);
   }
-
+*/
   public sendContact(contact: string) {
     this.sendMessage('contact', contact);
   }
@@ -213,8 +223,18 @@ export class InstantMessagingService {
     this.sendMessage('discussion', id);
   }
 
-  public sendAddParticipant(contact: string) {
-    const addParticipant = {id: this.currentDiscussion.id, contact: contact};
+  public sendRemoveContact(contact: string) {
+    this.sendMessage('removeContact', contact);
+  }
+
+  public removeContact(contact: string) {
+    const index = this.invitations.indexOf(contact);
+    this.invitations.splice(index, 1);
+  }
+
+  public sendAddParticipant(contactId: string) {
+    console.log('ajoute à discussion ' + this.currentDiscussion.id + ' lecontact ' + contactId)
+    const addParticipant = {id: this.currentDiscussion.id, contact: contactId};
     this.sendMessage('addParticipant', addParticipant);
   }
 

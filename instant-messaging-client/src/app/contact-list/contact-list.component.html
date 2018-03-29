@@ -5,11 +5,11 @@
       <mat-button-toggle-group>
 
           <mat-button-toggle [class.selected]="contact === selectedContact" (click)="onSelect(contact)">
-          {{contact}}
+          {{contact.username}}
           </mat-button-toggle>
 
-          <button class="addP" (click)="addParticipant(discussion.id)">
-              <mat-icon id="addParticipant"> person_add</mat-icon> 
+          <button class="addP" (click)="addParticipant(contact.userId)">
+              <mat-icon id="addParticipant">add</mat-icon> 
           </button>
 
           <mat-divider [inset]=true></mat-divider>
