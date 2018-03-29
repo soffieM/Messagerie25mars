@@ -270,6 +270,11 @@ export class InstantMessagingService {
     return (this.logged);
   }
 
+  public unLog() {
+    this.logged = false;
+    this.routing.goLogin();
+  }
+
   public sendLogin(username: string, password: string) {
     this.sendMessage('userLogin', {username: username, password: password});
   }

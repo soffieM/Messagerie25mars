@@ -1,13 +1,7 @@
 body{
     background: white;
 }
-app-root{
-    justify-content: center;
-    margin-left: middle;
-    margin-right: middle;
-    vertical-align: middle;
-    
-}
+
 
 div{
     display: inline;

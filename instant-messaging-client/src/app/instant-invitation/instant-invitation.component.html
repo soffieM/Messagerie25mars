@@ -2,17 +2,17 @@
 
   <mat-list-item>
 
-
-          <div> {{invitation}} </div>
+          <div>   <b> {{invitation}} </b> </div>
 
           <button class="ajout" (click)="onContact()">
-            <mat-icon id="ajouter">add_circle</mat-icon> 
+            <mat-icon MatListIcon id="ajouter">add_circle</mat-icon> 
           </button>
 
           <button class="supprimer" (click)="remove()">
-              <mat-icon id="corbeille">block</mat-icon> 
+              <mat-icon MatListIcon id="refuser">block</mat-icon> 
           </button>
 
+          <mat-divider [inset]=true></mat-divider>
 
   </mat-list-item>
 

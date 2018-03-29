@@ -1,6 +1,6 @@
 <mat-toolbar>
 
-    <mat-toolbar-row>
+    <mat-toolbar-row id="premiere">
 
         <span id="nom"> {{service.getUserName()}} </span>
 
@@ -9,16 +9,22 @@
         <button mat-icon-button [matMenuTriggerFor]="appMenu">
             <mat-icon id="iconToolbarFleche">keyboard_arrow_down</mat-icon>
         </button>
-
-    
+   
     </mat-toolbar-row>
+
+
+    <mat-toolbar-row id="participants"> <mat-icon id="people">people</mat-icon>
+            <!--<span id="particip" *ngFor="let participant of service.getDiscussionsListName()[0].participantsName"> 
+        {{participant}}</span>-->
+    </mat-toolbar-row>
+
     
 </mat-toolbar>
  
 
 <mat-menu class="menuProf" #appMenu="matMenu">
-    <button class="btn" mat-menu-item routerLink="/profil"> Profil </button>
-    <button class="btn" mat-menu-item (click)="service.unLog()"> Déconnexion </button>
+    <button class="btn-prof" mat-menu-item routerLink="/profil"> Profil </button>
+    <button class="btn-decon" mat-menu-item (click)="service.unLog()"> Déconnexion </button>
 </mat-menu>
 
 
@@ -87,8 +93,6 @@
 
     <div *ngIf="service.isLogged()">
         <app-message-list></app-message-list>
-        <!--app-connected-people-list></app-connected-people-list-->
-        <app-new-message-form></app-new-message-form>
     </div>
 
 

@@ -1,35 +1,44 @@
-div {
+  mat-list-item {
     width:100%;
     background-color: transparent;
-    color: lightblue;
-}
-
-/*
-div:hover #corbeille {
-    color: white;
-    opacity: 0.5;
-    visibility: visible;
-}
-
-
-div:hover #ajouter {
-    color: white;
-    opacity: 0.5;
-    visibility: visible;
-}
-*/
-
-
-#corbeille {
-    visibility: visible;
-}
-
-#ajouter {
-    visibility: visible;
-}
-
-button {
-    background-color: red;
     border: none;
-}
+    outline: 0;
+    outline-offset: 0;
+    background-image: none;
+    -webkit-box-shadow: none ;
+    box-shadow: none;
+    padding-left: 15px;
+  }
+  
+  mat-list-item:hover {
+    background-color: #328CC1;
+    border: none;
+  }
+  
+  mat-divider {
+    background-color: white;
+    opacity: 0.1;
+  }
+  
+  mat-list-item:hover #ajouter {
+    color: green;
+    visibility: visible;
+    background-color: #328CC1;
+    border: none;
+  }
+  
+  mat-list-item:hover #refuser {
+    color: red;
+    visibility: visible;
+    background-color: #328CC1;
+    border: none;
+  }
 
+  button {
+    visibility: hidden;
+    border: none;
+  }
+
+  div {
+      width: 100%;
+  }

@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { InstantMessage } from '../instant-message';
 import { InstantMessagingService } from '../instant-messaging.service';
+import { MatListModule } from '@angular/material/list';
 
 @Component({
   selector: 'app-new-message-form',

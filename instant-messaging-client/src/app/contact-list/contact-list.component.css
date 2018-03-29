@@ -1,30 +1,52 @@
 mat-button-toggle-group {
   width:100%;
   background-color: transparent;
+  border: none;
+  outline: 0;
+  outline-offset: 0;
+  background-image: none;
+  -webkit-box-shadow: none ;
+  box-shadow: none;
+}
+
+mat-button-toggle-group:hover {
+  background-color: #328CC1;
+  border: none;
+}
+
+mat-divider {
+  background-color: white;
+  opacity: 0.1;
 }
 
 mat-button-toggle {
   background-color: transparent;
-  color: lightblue;
+  color: black;
   width: 100%;
+  border: none;
+  outline:0;
+  outline-offset: 0;
+  background-image: none;
+  -webkit-box-shadow: none;
+  box-shadow: none; 
+  font-size: 90%; 
 }
 
 mat-button-toggle:hover {
-  color: white;
+  color: black;
+  background-color: #328CC1;
+  border: none;
+  outline: 0;
 }
 
 mat-button-toggle-group:hover #addParticipant {
   color: white;
-  opacity: 0.5;
   visibility: visible;
-}
-
-#addParticipant {
-  visibility: hidden;
-}
-
-button {
-  background-color: transparent;
+  background-color: #328CC1;
   border: none;
 }
 
+button {
+  visibility: hidden;
+  border: none;
+}
