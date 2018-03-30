@@ -129,6 +129,11 @@ export class DbModel {
         return user[0].username;
     }
 
+    async getUsernameFromMail (mail: string): Promise<string>{
+        const user = await this.database.collection('users').find({mail: mail}).toArray();
+        return user[0].username;
+    }
+
     async createDiscussion(iDSender: string, idContact: string): Promise<any> {
         console.log('on entre dans la fonction dbModel createDiscussion');
          const id_discussion = await this.getCountersIdwithIncrementation('idIncrementDiscussion');
@@ -139,8 +144,7 @@ export class DbModel {
     }
 
     async addDiscussionIdToUser(userId: string, id_discussion: string): Promise<void> {
-        await this.database.collection('users')
-        .update({_id : userId}, {$push: {id_discussion:{id: id_discussion}}});
+        await this.database.collection('users').update({_id : userId}, {$push: {id_discussion:{id: id_discussion}}});
     }
 
     async deleteDiscussionFromUser(userId, id_discussion: string):Promise <void> {
@@ -222,6 +226,17 @@ export class DbModel {
         }catch (e){
             console.log('error'+e);
         }
+    }
+
+    async changePassword(mail, password: string): Promise <void> {
+        const userId = await this.getUserIdFromMail(mail);
+        const hash = await this.hashPassword(password);
+        await this.database.collection('users').update({_id : userId}, {$set: {password:hash}});
+    }
+
+    async getUserIdFromMail (mail: string): Promise<string>{
+        const user = await this.database.collection('users').find({mail: mail}).toArray();
+        return user[0]._id;
     }
 
 

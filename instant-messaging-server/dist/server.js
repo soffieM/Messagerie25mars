@@ -12,10 +12,12 @@ const websocket_1 = require("websocket");
 const http = require("http");
 const client_1 = require("./client");
 const dbModel_1 = require("./dbModel");
+const sendmail_1 = require("./sendmail");
 class Server {
     constructor(port) {
         this.clients = [];
         this.db = new dbModel_1.DbModel();
+        this.mail = new sendmail_1.Mail(this.db);
         const server = this.createAndRunHttpServer(port);
         this.addWebSocketServer(server);
     }
@@ -34,11 +36,14 @@ class Server {
             client.sendUsersList(this.getClientsList());
         }
     }
-    broadcastInvitation(dest, username) {
-        for (const client of this.clients) {
-            if (client.getUserName() === dest)
-                client.sendInvitation(dest, username);
-        }
+    sendFriendInvitationsList(friend) {
+        return __awaiter(this, void 0, void 0, function* () {
+            for (const client of this.clients) {
+                if (client.getUserName() === friend) {
+                    client.sendInvitationsList();
+                }
+            }
+        });
     }
     sendFriendContactsList(friend) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -60,7 +65,7 @@ class Server {
             }
         });
     }
-    broadcastUpdateDiscussionList(userId, discussionId) {
+    broadcastUpdateDiscussionList(discussionId) {
         return __awaiter(this, void 0, void 0, function* () {
             const participants = yield this.db.getParticipants(discussionId);
             for (const client of this.clients) {
@@ -120,7 +125,7 @@ class Server {
     }
     onWebSocketRequest(request) {
         const connection = request.accept(null, request.origin);
-        const client = new client_1.Client(this, connection, this.db);
+        const client = new client_1.Client(this, connection, this.mail, this.db);
         this.clients.push(client);
     }
     removeClient(client) {

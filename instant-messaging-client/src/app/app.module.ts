@@ -35,6 +35,7 @@ import { ContactComponent } from './contact/contact.component';
 import { ProfilComponent } from './profil/profil.component';
 import { DiscussionsListComponent } from './discussions-list/discussions-list.component';
 import { AboutComponent } from './about/about.component';
+import { ForgottenPasswordComponent } from './forgotten-password/forgotten-password.component';
 
 @NgModule({
   declarations: [
@@ -57,7 +58,8 @@ import { AboutComponent } from './about/about.component';
     ContactComponent,
     ProfilComponent,
     DiscussionsListComponent,
-    AboutComponent
+    AboutComponent,
+    ForgottenPasswordComponent
   ],
   imports: [
     BrowserModule,

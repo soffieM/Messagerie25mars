@@ -141,6 +141,12 @@ class DbModel {
             return user[0].username;
         });
     }
+    getUsernameFromMail(mail) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = yield this.database.collection('users').find({ mail: mail }).toArray();
+            return user[0].username;
+        });
+    }
     createDiscussion(iDSender, idContact) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('on entre dans la fonction dbModel createDiscussion');
@@ -153,8 +159,7 @@ class DbModel {
     }
     addDiscussionIdToUser(userId, id_discussion) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this.database.collection('users')
-                .update({ _id: userId }, { $push: { id_discussion: { id: id_discussion } } });
+            yield this.database.collection('users').update({ _id: userId }, { $push: { id_discussion: { id: id_discussion } } });
         });
     }
     deleteDiscussionFromUser(userId, id_discussion) {
@@ -250,6 +255,19 @@ class DbModel {
             catch (e) {
                 console.log('error' + e);
             }
+        });
+    }
+    changePassword(mail, password) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const userId = yield this.getUserIdFromMail(mail);
+            const hash = yield this.hashPassword(password);
+            yield this.database.collection('users').update({ _id: userId }, { $set: { password: hash } });
+        });
+    }
+    getUserIdFromMail(mail) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = yield this.database.collection('users').find({ mail: mail }).toArray();
+            return user[0]._id;
         });
     }
 }

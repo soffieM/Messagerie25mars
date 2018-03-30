@@ -14,8 +14,8 @@
 
 
     <mat-toolbar-row id="participants"> <mat-icon id="people">people</mat-icon>
-            <!--<span id="particip" *ngFor="let participant of service.getDiscussionsListName()[0].participantsName"> 
-        {{participant}}</span>-->
+            <span id="particip" *ngFor="let participant of service.getCurrentDiscussionParticipantsNames()"> 
+        {{participant}}</span>
     </mat-toolbar-row>
 
     

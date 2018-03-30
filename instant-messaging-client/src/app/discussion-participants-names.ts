@@ -1,4 +1,4 @@
 export class DiscussionParticipantsNames {
-  constructor(public id: string, public participantsName: String[]) {
+  constructor(public id: string, public participantsName: string[]) {
   }
 }

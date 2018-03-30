@@ -2,10 +2,12 @@ import {server as WebSocketServer, connection as WebSocketConnection} from 'webs
 import * as http from 'http';
 import { Client } from "./client";
 import { DbModel } from "./dbModel";
+import { Mail } from "./sendmail";
 
 export class Server {
     private clients: Client[] = []
     db: DbModel = new DbModel();
+    mail: Mail = new Mail (this.db);
         
     public constructor(port: number) {
         const server = this.createAndRunHttpServer(port);
@@ -27,12 +29,13 @@ export class Server {
         }
       }
 
-    public broadcastInvitation (dest: string, username: string){
+      async sendFriendInvitationsList (friend: string){
         for(const client of this.clients){
-            if(client.getUserName()===dest)
-                client.sendInvitation(dest, username);
+            if (client.getUserName() === friend){
+                client.sendInvitationsList();
+            }
         }
-    }
+    } 
     
     async sendFriendContactsList (friend: string){
         for(const client of this.clients){
@@ -52,7 +55,7 @@ export class Server {
         }     
     }
 
-    async broadcastUpdateDiscussionList(userId, discussionId){
+    async broadcastUpdateDiscussionList(discussionId){
         const participants = await this.db.getParticipants(discussionId);
         for (const client of this.clients){
             if (!(participants.indexOf(client.getUserId()) == -1))
@@ -109,7 +112,7 @@ export class Server {
 
     private onWebSocketRequest(request): void {
         const connection = request.accept(null, request.origin);
-        const client = new Client(this, connection, this.db);
+        const client = new Client(this, connection, this.mail, this.db);
         this.clients.push(client);
     }
 

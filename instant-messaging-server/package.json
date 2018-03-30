@@ -16,7 +16,8 @@
   "dependencies": {
     "@types/websocket": "0.0.33",
     "bcrypt": "^1.0.3",
-    "mongodb": "^2.2.33",
-    "websocket": "^1.0.24"
+    "mongodb": "^3.0.4",
+    "nodemailer": "^4.6.3",
+    "websocket": "^1.0.25"
   }
 }
