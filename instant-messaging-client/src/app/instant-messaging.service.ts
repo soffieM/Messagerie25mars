@@ -11,7 +11,7 @@ import { UserIdAndName } from './user-id-and-name';
 
 @Injectable()
 export class InstantMessagingService {
-  private user: User; // probablement un UserIdAndName
+  private user: User;
   private users: string [] = []; // liste des utilisateurs connectés
   private socket: WebSocket;
   private logged: boolean;
@@ -24,7 +24,6 @@ export class InstantMessagingService {
   private discussionsListId: DiscussionParticipantsIds[] = []; // liste des numéros de discussion + id des participants
   private currentDiscussion: Discussion;
   private messages: InstantMessage[] = []; // peut être attribut de currentDiscussion, attention au départ
-
   private welcome: Discussion = {id: '0', participants: [],
   history: [new InstantMessage('Sélectionnez un contact ou une discussion', null, null)]};
 
@@ -73,12 +72,12 @@ export class InstantMessagingService {
     console.log(this.user);
   }
 
-  private onInvitationsList(invitationsList: string []) {
-    this.invitationsList = invitationsList;
-  }
-
   private onContactsList(ContactsList: UserIdAndName[]) {
     this.contacts = ContactsList;
+  }
+
+  private onInvitationsList(invitationsList: string []) {
+    this.invitationsList = invitationsList;
   }
 
   private onDiscussionList(discussionsList: DiscussionsListItem[]) {
@@ -107,41 +106,51 @@ export class InstantMessagingService {
   }
 
   private onConnection(username: string) {
-    this.messages.push(new InstantMessage(username + ' vient de rejoindre la conversation', 'Message Automatique', new Date()));
+    console.log('onConnection.....service = ' + this.isConnectedUser(username));
+    // this.messages.push(new InstantMessage(username + ' vient de rejoindre la conversation', 'Message Automatique', new Date()));
   }
 
   private onDisconnection(username: string) {
-    this.messages.push(new InstantMessage(username + ' vient de quitter la conversation', 'Message Automatique', new Date()));
+    console.log('onDisconnection.....service = ' + this.users);
+    const index = this.users.indexOf(username);
+    this.users.splice(index, 1);
+    console.log('onDisconnection.....service 2 = ' + this.users);
+    // this.messages.push(new InstantMessage(username + ' vient de quitter la conversation', 'Message Automatique', new Date()));
   }
+
+  public isConnectedUser(username: string): boolean {
+    return this.users.includes(username);
+  }
+
 
   private onInvitation(invitation: string[]) {
     console.log(this.invitations);
-    this.invitations.push(invitation[1]);
-    console.log(this.invitations);
-  }
+     this.invitations.push(invitation[1]);
+     console.log(this.invitations);
+ }
 
-  private onLogin(state: string) {
-    if (state === 'ok') {
-      this.logged = true;
-      } else {
-      this.errorMessage = state;
-      this.routing.goError();
-    }
-  }
-
-  private onSubscription(state: string) {
-    if ( state === 'ok') {
-      this.routing.goLogin();
-    } else if (state === 'Pseudo déjà utilisé') {
-      this.errorMessage = state;
-      this.routing.goError();
-    } else if (state === 'Compte déjà existant') {
-      this.errorMessage = state;
-      this.routing.goError();
+ private onLogin(state: string) {
+  if (state === 'ok') {
+    this.logged = true;
     } else {
-      this.routing.goError();
-    }
+    this.errorMessage = state;
+    this.routing.goError();
   }
+}
+
+private onSubscription(state: string) {
+  if ( state === 'ok') {
+    this.routing.goLogin();
+  } else if (state === 'Pseudo déjà utilisé') {
+    this.errorMessage = state;
+    this.routing.goError();
+  } else if (state === 'Compte déjà existant') {
+    this.errorMessage = state;
+    this.routing.goError();
+  } else {
+    this.routing.goError();
+  }
+}
 
   private onMessage(data: string) {
     const message = JSON.parse(data);
@@ -152,12 +161,11 @@ export class InstantMessagingService {
       case 'connection': this.onConnection(message.data); break;
       case 'disconnection': this.onDisconnection(message.data); break;
       case 'subscription': this.onSubscription(message.data); break;
-      case 'invitation': this.onInvitation(message.data); break;
       case 'discussion' : this.onFetchDiscussion(message.data); break;
       case 'ownUser': this.onOwnUser(message.data); break;
-      case 'invitationsList': this.onInvitationsList(message.data); break;
-      case 'contactsList': this.onContactsList(message.data); break;
       case 'discussionsList': this.onDiscussionList(message.data); break;
+      case 'contactsList': this.onContactsList(message.data); break;
+      case 'invitationsList': this.onInvitationsList(message.data); break;
     }
   }
 
@@ -166,6 +174,7 @@ export class InstantMessagingService {
     this.socket = new WebSocket('ws:/localhost:4201');
     this.socket.onmessage = (event: MessageEvent) => this.onMessage(event.data);
     this.currentDiscussion = this.welcome;
+
   }
 
   public removeInvitation(invitation: string) {
@@ -181,16 +190,16 @@ export class InstantMessagingService {
     return this.users;
   }
 
-  public getUserName(): string {
-    return this.user.username;
-  }
-
   public getErrorMessage(): string {
     return this.errorMessage;
   }
 
   public getInvitations(): string[] {
     return this.invitationsList;
+  }
+
+  public getUserName(): string {
+    return this.user.username;
   }
 
   public getContacts(): UserIdAndName[] {
@@ -274,6 +283,7 @@ export class InstantMessagingService {
   public unLog() {
     this.logged = false;
     this.routing.goLogin();
+    this.sendMessage('disconnection', this.user.username);
   }
 
   public sendLogin(username: string, password: string) {

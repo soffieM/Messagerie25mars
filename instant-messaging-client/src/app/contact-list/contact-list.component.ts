@@ -21,4 +21,10 @@ export class ContactListComponent {
     console.log('poubelle' + contactId);
     this.service.sendAddParticipant(contactId);
   }
+
+  private deleteContact(contactUsername: string) {
+    console.log('poubelle' + contactUsername);
+    this.service.sendRemoveContact(contactUsername);
+  }
+
 }

@@ -1,26 +1,40 @@
 <mat-list>
 
-  <mat-list-item *ngFor="let contact of service.getContacts()">
-
-      <mat-button-toggle-group>
-
-          <mat-button-toggle [class.selected]="contact === selectedContact" (click)="onSelect(contact)">
-          {{contact.username}}
-          </mat-button-toggle>
-
-          <button class="addP" (click)="addParticipant(contact.userId)">
-              <mat-icon id="addParticipant">add</mat-icon> 
+    <mat-list-item *ngFor="let contact of service.getContacts()">
+  
+        <mat-button-toggle-group>
+  
+          <button class="connectedPeople" *ngIf="service.isConnectedUser(contact.username)">
+              <mat-icon matListIcon id="connected">account_circle </mat-icon>    
           </button>
-
-          <mat-divider [inset]=true></mat-divider>
-
-      </mat-button-toggle-group>
-
-  </mat-list-item>
-
-</mat-list>
-
-<p></p>
-<app-invitation-form></app-invitation-form>
-
-
+     
+             
+          <button class="disconnectedPeople" *ngIf="!service.isConnectedUser(contact.username)">       
+          <mat-icon matListIcon id="disconnected"> account_circle </mat-icon>        
+          </button>        
+          
+      
+      
+            <mat-button-toggle [class.selected]="contact === selectedContact" (click)="onSelect(contact)">
+            {{contact.username}} 
+            </mat-button-toggle>
+  
+            <button class="addP" (click)="addParticipant(contact.userId)">
+                <mat-icon id="addParticipant">add</mat-icon> 
+            </button>
+            <button class="supp" (click)="deleteContact(contact.username)">
+              <mat-icon matListIcon id="corbeille"> delete </mat-icon> 
+            </button>
+  
+            <mat-divider [inset]=true></mat-divider>
+  
+        </mat-button-toggle-group>
+  
+    </mat-list-item>
+  
+  </mat-list>
+  
+  <p></p>
+  <app-invitation-form></app-invitation-form>
+  
+  
