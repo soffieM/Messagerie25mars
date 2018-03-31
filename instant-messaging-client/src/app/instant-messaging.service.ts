@@ -11,7 +11,7 @@ import { UserIdAndName } from './user-id-and-name';
 
 @Injectable()
 export class InstantMessagingService {
-  private user: User;
+  private user: User; // probablement un UserIdAndName
   private users: string [] = []; // liste des utilisateurs connectés
   private socket: WebSocket;
   private logged: boolean;

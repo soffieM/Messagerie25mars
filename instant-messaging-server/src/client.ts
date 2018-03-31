@@ -7,6 +7,7 @@ export class Client {
     private usernameRegex = /^[a-zA-Z0-9]*$/;
     private username: string = null;
     private userId: string = null;
+    private currentDiscussion: string = null;
 
     public constructor(private server: Server, private connection: WebSocketConnection,  private mail:Mail, private db: DbModel) {
         connection.on('message', (message)=>this.onMessage(message.utf8Data));
@@ -35,8 +36,8 @@ export class Client {
         const username = this.username;
         const dataUser = {userId, username};
         this.sendMessage('ownUser', dataUser);
-        await this.sendDiscussionsList(); // redondant avec onUserLogin
-        await this.sendContactsList(); // redondant avec onUserLogin
+        // await this.sendDiscussionsList(); // redondant avec onUserLogin
+        // await this.sendContactsList(); // redondant avec onUserLogin
     }
 
     async sendDiscussionsList(){
@@ -209,8 +210,6 @@ export class Client {
            this.server.sendFriendInvitationsList(dest);
     }
 
-    
-
     async onContact(friend) {
         const b = await this.db.verifyIfExistInContact_Invitation('contacts', this.username, friend);
         if (b === 0){
@@ -233,11 +232,19 @@ export class Client {
 
     async onFetchDiscussion(id: string) {
         console.log('client.ts on entre dans la fonction onFetchDiscussion ' + id );
+        this.currentDiscussion = id;
         const participants = await this.db.getParticipants(id);
         const history = await this.db.getHistory(id);        
         const discussion = {id, participants, history};
         this.sendMessage('discussion', discussion);
     }
+
+    async onFetchDiscussionCondition(id: string) {
+        console.log('client.ts on entre dans la fonction onFetchDiscussionCondition ' + id );
+        if (this.currentDiscussion == id) 
+            this.onFetchDiscussion(id);
+    }
+
 
     async onAddParticipant(id: string, contactId: string) {
         console.log('client.ts ajout participant '+ contactId +' a la discussion ' + id);
@@ -251,7 +258,7 @@ export class Client {
         console.log(this.userId + 'quitte discussion' + id);
         await this.db.deleteParticipantFromDiscussion(id, this.userId);
         await this.db.deleteDiscussionFromUser(this.userId, id);
-        this.sendDiscussionsList();
+        this.sendDiscussionsList(); // nécessaire mais pourquoi ?
         this.server.broadcastUpdateDiscussionList(id);
     }
 

@@ -17,6 +17,7 @@ class Client {
         this.usernameRegex = /^[a-zA-Z0-9]*$/;
         this.username = null;
         this.userId = null;
+        this.currentDiscussion = null;
         connection.on('message', (message) => this.onMessage(message.utf8Data));
         connection.on('close', () => server.removeClient(this));
         connection.on('close', () => server.broadcastUsersList());
@@ -40,8 +41,8 @@ class Client {
             const username = this.username;
             const dataUser = { userId, username };
             this.sendMessage('ownUser', dataUser);
-            yield this.sendDiscussionsList(); // redondant avec onUserLogin
-            yield this.sendContactsList(); // redondant avec onUserLogin
+            // await this.sendDiscussionsList(); // redondant avec onUserLogin
+            // await this.sendContactsList(); // redondant avec onUserLogin
         });
     }
     sendDiscussionsList() {
@@ -272,10 +273,18 @@ class Client {
     onFetchDiscussion(id) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('client.ts on entre dans la fonction onFetchDiscussion ' + id);
+            this.currentDiscussion = id;
             const participants = yield this.db.getParticipants(id);
             const history = yield this.db.getHistory(id);
             const discussion = { id, participants, history };
             this.sendMessage('discussion', discussion);
+        });
+    }
+    onFetchDiscussionCondition(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            console.log('client.ts on entre dans la fonction onFetchDiscussionCondition ' + id);
+            if (this.currentDiscussion == id)
+                this.onFetchDiscussion(id);
         });
     }
     onAddParticipant(id, contactId) {
@@ -292,7 +301,7 @@ class Client {
             console.log(this.userId + 'quitte discussion' + id);
             yield this.db.deleteParticipantFromDiscussion(id, this.userId);
             yield this.db.deleteDiscussionFromUser(this.userId, id);
-            this.sendDiscussionsList();
+            this.sendDiscussionsList(); // nécessaire mais pourquoi ?
             this.server.broadcastUpdateDiscussionList(id);
         });
     }

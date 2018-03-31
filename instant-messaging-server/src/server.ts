@@ -29,7 +29,7 @@ export class Server {
         }
       }
 
-      async sendFriendInvitationsList (friend: string){
+    async sendFriendInvitationsList (friend: string){
         for(const client of this.clients){
             if (client.getUserName() === friend){
                 client.sendInvitationsList();
@@ -58,8 +58,10 @@ export class Server {
     async broadcastUpdateDiscussionList(discussionId){
         const participants = await this.db.getParticipants(discussionId);
         for (const client of this.clients){
-            if (!(participants.indexOf(client.getUserId()) == -1))
+            if (!(participants.indexOf(client.getUserId()) == -1)) {
                 client.sendDiscussionsList();
+                client.onFetchDiscussionCondition(discussionId);
+            }
         }  
     }
 
@@ -89,7 +91,6 @@ export class Server {
         }
         return usersList;
     }
-    
 
     private createAndRunHttpServer(port: number): http.Server {
         const server = http.createServer(function(request, response) {
