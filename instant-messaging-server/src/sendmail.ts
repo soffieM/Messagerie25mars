@@ -39,7 +39,7 @@ export class Mail {
             else
                 console.log(info);
         });
-        await this.db.changePassword(mail, password);
+        await this.db.changePasswordFromMail(mail, password);
         console.log('mot de passe changé dans la base');
     }
 

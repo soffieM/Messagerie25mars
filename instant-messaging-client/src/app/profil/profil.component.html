@@ -1,21 +1,30 @@
+<div *ngIf="!service.isLogged()">
+  <span>Vous n'êtes pas connecté, cliquer </span>
+      <a routerLink="/login">ici</a>
+  <span> pour vous identifier.</span>
+</div>
+
+<div *ngIf="service.isLogged()">
+
 <div class="titre">
-<h2> <b>PROFIL EDITING</b> </h2>
+<h2> <b>EDITION DU PROFIL</b> </h2>
 </div>
     
 <form class="corps">  
 
   <div class="nomUtilisateur">
-    Nom d'utilisateur <input name="log" placeholder="{{service.getUserName()}}" class="login-input" type="text">
+    <input name="log" placeholder="Nouveau nom d'utilisateur" [(ngModel)]="newUsername" class="login-input" type="text">
+    <button id="val1" (click)="changeUsername()"> Modifier le nom d'utilisateur  </button> 
   </div>
 
   <div class="motPasse">
-    Modifier le mot de passe  
-    <button class="password"> <mat-icon class="material-icons" color="primary">lock</mat-icon>
-    </button>
-  </div>
-      
-  <div class="btn-val">
-    <button id="val" routerLink="/chat"> valider </button> 
-  </div>
-        
+    <input name="log" placeholder="Ancien mot de passe" [(ngModel)]="oldPassword" class="login-input" type="password">
+    <input name="log" placeholder="Nouveau mot de passe" [(ngModel)]="newPassword" class="login-input" type="password">
+    <button id="val2" (click)="changePassword()"> Modifier le mot de passe  </button>
+  </div>  
+
+<div>
+  <br>
+  <button id="val3" (click)="goBack()"> Annuler  </button>
+</div>
 </form>

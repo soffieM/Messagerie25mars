@@ -88,14 +88,6 @@ export class DbModel {
         }        
     }
 
-
-    //async addInvitationsInUsersCollection (usernameSender: string, usernameReceiver: string): Promise<void> {
-        //const iDSender = await this.getUserId(usernameSender);
-        //const iDReceiver = await this.getUserId(usernameReceiver);
-        //await this.database.collection('users')
-        //.update({_id : iDSender}, {$push: {invitations:{idUser: iDReceiver}}});
-    //}
-
     async getContactUser (username: string): Promise<any> {
         const contact =  await this.database.collection('users').find({username:username}).toArray();
         return contact[0].contacts;
@@ -228,10 +220,21 @@ export class DbModel {
         }
     }
 
-    async changePassword(mail, password: string): Promise <void> {
+    async changePasswordFromMail(mail, password: string): Promise <void> {
         const userId = await this.getUserIdFromMail(mail);
         const hash = await this.hashPassword(password);
         await this.database.collection('users').update({_id : userId}, {$set: {password:hash}});
+    }
+
+    async changePasswordFromUsername(username: string, password: string): Promise <void> {
+        const userId = await this.getUserId(username);
+        const hash = await this.hashPassword(password);
+        await this.database.collection('users').update({_id : userId}, {$set: {password:hash}});
+    }
+
+    async changeUsername(oldUsername, newUsername): Promise <void> {
+        const userId = await this.getUserId(oldUsername)
+        await this.database.collection('users').update({_id : userId}, {$set: {username: newUsername}});
     }
 
     async getUserIdFromMail (mail: string): Promise<string>{

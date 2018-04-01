@@ -41,6 +41,8 @@ export class Client {
     }
 
     async sendDiscussionsList(){
+        console.log("entree dans this.sendDiscussionsList");
+        console.log(this.username);
         const discussions = 
         await this.db.getElementsFromUser('id_discussion', this.username);
         const discussionsList: any[] =[];
@@ -57,8 +59,9 @@ export class Client {
                 }
             }
             discussionsList.push({id, participants});
-        }
-        console.log('discussionsList'+ discussionsList);
+        };
+        console.log('discussionsList');
+        console.log(discussionsList);
         this.sendMessage('discussionsList', discussionsList);
     }
 
@@ -111,9 +114,10 @@ export class Client {
     }
 
     async removeContact(contact){
-        this.sendMessage('removeContact', contact);
-        await this.db.deleteInvitationsOrContacts ('contacts', contact, this.username);
-        await this.db.deleteInvitationsOrContacts ('contacts', this.username, contact);
+        await this.db.deleteInvitationsOrContacts ('contact', contact, this.username);
+        await this.db.deleteInvitationsOrContacts ('contact', this.username, contact);
+        this.sendContactsList();
+        this.server.sendFriendContactsList(contact);
     }
 
     private onMessage(utf8Data: string): void {
@@ -131,9 +135,15 @@ export class Client {
             case 'quitDiscussion': this.onQuitDiscussion(message.data); break;
             case 'removeContact': this.removeContact(message.data); break;
             case 'forgottenpassword': this.onPasswordForgotten(message.data); break;
+            case 'disconnection': this.onDisconnection(message.data); break;
+            case 'newUsername': this.onNewUsername(message.data); break;
+            case 'newPassword': this.onNewPassword(message.data); break;
        }
     }
 
+    async onDisconnection(username){
+        this.server.broadcastUserConnection('disconnection',username);
+    }
     async onUserLogin(username, password) {
         const i = await this.db.checkIfUserExists(username);
         if (i === 1 ){ 
@@ -189,6 +199,34 @@ export class Client {
         }     
     }
 
+    async onNewUsername({oldUsername: oldUsername, newUsername: newUsername}) {
+        const i = await this.db.checkIfUserExists(newUsername);
+        console.log(i);
+        if (i === 1 ){ 
+            this.sendMessage('newUserNameAlreadyUsed', 'Pseudo déjà utilisé ');
+            return;
+        } else {
+            await this.db.changeUsername(oldUsername, newUsername);
+            this.username = newUsername;
+            this.sendMessage('onNewUsername', newUsername);
+            this.server.sendFriendsContactsList(newUsername);
+            this.server.broadcastDiscussionsListOnNewName(this.userId); /// CE QUE J AI AJOUTE
+            return;
+        }     
+    }
+
+    async onNewPassword({username: username, oldPassword: oldPassword, newPassword: newPassword}) {
+        const verifyPassword = await this.db.verifyPasswordWithHashCode (username, oldPassword);  
+        if (!verifyPassword){
+            this.sendMessage('statePassword', 'Mot de passe incorrect ');
+            return;
+        } else {
+            this.db.changePasswordFromUsername(username, newPassword);
+            this.sendMessage('statePassword', 'Mot de passe modifié');
+            return;
+        }     
+    }
+
     private onInstantMessage(discussionId: string, content: string, participants: string[]): void {
         if (!(typeof 'content' === 'string')) return;
         if (this.username==null) return;
@@ -210,6 +248,8 @@ export class Client {
            this.server.sendFriendInvitationsList(dest);
     }
 
+    
+
     async onContact(friend) {
         const b = await this.db.verifyIfExistInContact_Invitation('contacts', this.username, friend);
         if (b === 0){
@@ -225,14 +265,13 @@ export class Client {
         const id = await this.db.createDiscussion(this.userId, contactId);
         this.onFetchDiscussion(id);
         console.log('a chargé la disc ' + id +'; client.ts onCreateDiscussion ' + contactId + ' terminé' );
-        this.sendDiscussionsList();
-        this.server.broadcastCreateDiscussion(contactId, id);
         await this.db.addDiscussionIdToUser(this.userId, id);
+        this.server.broadcastCreateDiscussion(contactId, id);
+        this.sendDiscussionsList();
     }
 
     async onFetchDiscussion(id: string) {
         console.log('client.ts on entre dans la fonction onFetchDiscussion ' + id );
-        this.currentDiscussion = id;
         const participants = await this.db.getParticipants(id);
         const history = await this.db.getHistory(id);        
         const discussion = {id, participants, history};
@@ -244,8 +283,7 @@ export class Client {
         if (this.currentDiscussion == id) 
             this.onFetchDiscussion(id);
     }
-
-
+ 
     async onAddParticipant(id: string, contactId: string) {
         console.log('client.ts ajout participant '+ contactId +' a la discussion ' + id);
         await this.db.addDiscussionIdToUser(contactId, id);
@@ -258,7 +296,7 @@ export class Client {
         console.log(this.userId + 'quitte discussion' + id);
         await this.db.deleteParticipantFromDiscussion(id, this.userId);
         await this.db.deleteDiscussionFromUser(this.userId, id);
-        this.sendDiscussionsList(); // nécessaire mais pourquoi ?
+        this.sendDiscussionsList();
         this.server.broadcastUpdateDiscussionList(id);
     }
 

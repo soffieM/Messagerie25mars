@@ -76,6 +76,51 @@ class Server {
             }
         });
     }
+    sendFriendsContactsList(usernameOri) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const contacts = yield this.db.getElementsFromUser('contacts', usernameOri);
+            const contactsList = [];
+            for (let i = 0; i < contacts.length; i++) {
+                const userId = contacts[i].idUser;
+                const username = yield this.db.getUsername(userId);
+                contactsList.push(username);
+            }
+            for (const client of this.clients) {
+                const index = contactsList.indexOf(client.getUserName());
+                if (index !== -1) {
+                    client.sendContactsList();
+                }
+            }
+            this.broadcastUsersList();
+        });
+    }
+    broadcastDiscussionsListOnNewName(userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const username = yield this.db.getUsername(userId);
+            const discussions = yield this.db.getElementsFromUser('id_discussion', username);
+            var participantsList = [];
+            var discussionsList = [];
+            for (let i = 0; i < discussions.length; i++) {
+                const id = discussions[i].id;
+                discussionsList.push(id);
+                const participantsComplet = yield this.db.getParticipants(id);
+                for (let i = 0; i < participantsComplet.length; i++) {
+                    const userId = participantsComplet[i];
+                    if (userId != null) {
+                        participantsList.push(userId);
+                    }
+                }
+            }
+            for (const client of this.clients) {
+                if (!(participantsList.indexOf(client.getUserId()) == -1)) {
+                    client.sendDiscussionsList();
+                    for (const discussion of discussionsList) {
+                        client.onFetchDiscussionCondition(discussion);
+                    }
+                }
+            }
+        });
+    }
     broadcastFetchDiscussion(discussionId) {
         return __awaiter(this, void 0, void 0, function* () {
             const participants = yield this.db.getParticipants(discussionId);

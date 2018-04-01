@@ -5,13 +5,12 @@ import { Discussion } from './discussion';
 import { DiscussionsListItem } from './discussions-list-item';
 import { DiscussionParticipantsNames } from './discussion-participants-names';
 import { DiscussionParticipantsIds } from './discussion-participants-ids';
-import { User } from './user';
 import { UserIdAndName } from './user-id-and-name';
 
 
 @Injectable()
 export class InstantMessagingService {
-  private user: User; // probablement un UserIdAndName
+  private user: UserIdAndName;
   private users: string [] = []; // liste des utilisateurs connectés
   private socket: WebSocket;
   private logged: boolean;
@@ -19,7 +18,7 @@ export class InstantMessagingService {
   private invitations: string[] = [];
   private invitationsList: string [] = [];
   private contacts: UserIdAndName[] = [];
-  private discussionsList: string[]; // liste des numéros de discussion
+  // private discussionsList: string[]; // liste des numéros de discussion
   private discussionsListName: DiscussionParticipantsNames[] = []; // liste des numéros de discussion + nom des participants
   private discussionsListId: DiscussionParticipantsIds[] = []; // liste des numéros de discussion + id des participants
   private currentDiscussion: Discussion;
@@ -66,7 +65,7 @@ export class InstantMessagingService {
     console.log(this.users);
   }
 
-  private onOwnUser(user: User) {
+  private onOwnUser(user: UserIdAndName) {
     this.user = user;
     this.routing.goChat();
     console.log(this.user);
@@ -138,6 +137,11 @@ export class InstantMessagingService {
   }
 }
 
+private onNewUsername(username: string) {
+  this.user.username = username;
+  this.routing.goChat();
+}
+
 private onSubscription(state: string) {
   if ( state === 'ok') {
     this.routing.goLogin();
@@ -148,6 +152,20 @@ private onSubscription(state: string) {
     this.errorMessage = state;
     this.routing.goError();
   } else {
+    this.routing.goError();
+  }
+}
+
+private onNewUsernameAlreadyUsed(errorMessage: string) {
+    this.errorMessage = errorMessage;
+    this.routing.goError();
+}
+
+private onStatePassword(state: string) {
+  if ( state === 'Mot de passe modifié') {
+    this.routing.goChat();
+  } else {
+    this.errorMessage = state;
     this.routing.goError();
   }
 }
@@ -166,6 +184,9 @@ private onSubscription(state: string) {
       case 'discussionsList': this.onDiscussionList(message.data); break;
       case 'contactsList': this.onContactsList(message.data); break;
       case 'invitationsList': this.onInvitationsList(message.data); break;
+      case 'onNewUsername': this.onNewUsername(message.data); break;
+      case 'newUserNameAlreadyUsed': this.onNewUsernameAlreadyUsed(message.data); break;
+      case 'statePassword': this.onStatePassword(message.data); break;
     }
   }
 
@@ -213,13 +234,10 @@ private onSubscription(state: string) {
   public getCurrentDiscussionParticipantsNames(): string[] {
     for (const list of this.discussionsListName) {
       if (list.id === this.currentDiscussion.id) {
-        const clonedlist = list.participantsName.slice();
-        const index = clonedlist.indexOf(this.user.username);
-        // if (index !== -1) {clonedlist.splice(index, 1)};  pas un bon clone
-        return clonedlist;
+        return list.participantsName;
       }
     }
-    return ['Sélectionnez une discussion'];
+    return ['Sélectionnez un contact ou une discussion'];
   }
 
   public sendMessage(type: string, data: any) {
@@ -259,7 +277,7 @@ private onSubscription(state: string) {
   public sendRemoveContact(contact: string) {
     this.sendMessage('removeContact', contact);
   }
-
+// encore utile ?
   public removeContact(contact: string) {
     const index = this.invitations.indexOf(contact);
     this.invitations.splice(index, 1);
@@ -296,5 +314,13 @@ private onSubscription(state: string) {
 
   public sendMail(mail: string) {
     this.sendMessage('forgottenpassword', mail);
+  }
+
+  public sendNewUsername(newUsername: string) {
+    this.sendMessage('newUsername', {oldUsername: this.user.username, newUsername: newUsername});
+  }
+
+  public sendNewPassword(oldPassword: string, newPassword: string) {
+    this.sendMessage('newPassword', {username: this.user.username, oldPassword: oldPassword, newPassword: newPassword});
   }
 }

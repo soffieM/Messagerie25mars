@@ -29,7 +29,7 @@ export class Server {
         }
       }
 
-    async sendFriendInvitationsList (friend: string){
+      async sendFriendInvitationsList (friend: string){
         for(const client of this.clients){
             if (client.getUserName() === friend){
                 client.sendInvitationsList();
@@ -65,6 +65,50 @@ export class Server {
         }  
     }
 
+    async sendFriendsContactsList (usernameOri: string){
+        const contacts = 
+        await this.db.getElementsFromUser('contacts', usernameOri);
+        const contactsList: any[] =[];
+        for (let i = 0; i < contacts.length; i++){
+            const userId = contacts[i].idUser;
+            const username = await this.db.getUsername(userId);
+            contactsList.push(username);
+        }
+        for(const client of this.clients){
+            const index = contactsList.indexOf(client.getUserName())
+            if (index !== -1){
+                client.sendContactsList();
+            }
+        }
+        this.broadcastUsersList();
+    } 
+
+    async broadcastDiscussionsListOnNewName(userId){
+        const username = await this.db.getUsername(userId);
+        const discussions = await this.db.getElementsFromUser('id_discussion', username); 
+        var participantsList = [];
+        var discussionsList = [];
+        for (let i = 0; i < discussions.length; i++){
+            const id = discussions[i].id;
+            discussionsList.push(id);
+            const participantsComplet = await this.db.getParticipants(id);
+            for (let i = 0; i < participantsComplet.length; i++){
+                const userId = participantsComplet[i];
+                if (userId != null) { 
+                    participantsList.push(userId);
+                }
+            }
+        }
+        for (const client of this.clients){
+            if (!(participantsList.indexOf(client.getUserId()) == -1)) {
+                client.sendDiscussionsList();
+                for (const discussion of discussionsList) {
+                    client.onFetchDiscussionCondition(discussion); 
+                }
+            }
+        } 
+    }
+
     async broadcastFetchDiscussion(discussionId){
         const participants = await this.db.getParticipants(discussionId);
         for (const client of this.clients){
@@ -91,6 +135,7 @@ export class Server {
         }
         return usersList;
     }
+    
 
     private createAndRunHttpServer(port: number): http.Server {
         const server = http.createServer(function(request, response) {

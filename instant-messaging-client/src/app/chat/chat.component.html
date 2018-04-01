@@ -1,3 +1,12 @@
+
+<div *ngIf="!service.isLogged()">
+    <span>Vous n'êtes pas connecté, cliquer </span>
+        <a routerLink="/login">ici</a>
+    <span> pour vous identifier.</span>
+</div>
+
+<div *ngIf="service.isLogged()">
+
 <mat-toolbar>
 
     <mat-toolbar-row id="premiere">
@@ -83,17 +92,9 @@
 
     </mat-sidenav>
 
-
-    <div *ngIf="!service.isLogged()">
-        <span>Vous n'êtes pas connecté, cliquer </span>
-            <a routerLink="/login">ici</a>
-        <span> pour vous identifier.</span>
-    </div>
-
-
-    <div *ngIf="service.isLogged()">
+    <div>
         <app-message-list></app-message-list>
     </div>
 
-
 </mat-sidenav-container>
+</div>

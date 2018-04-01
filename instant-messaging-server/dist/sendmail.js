@@ -43,7 +43,7 @@ class Mail {
                 else
                     console.log(info);
             });
-            yield this.db.changePassword(mail, password);
+            yield this.db.changePasswordFromMail(mail, password);
             console.log('mot de passe changé dans la base');
         });
     }

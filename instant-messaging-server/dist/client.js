@@ -47,6 +47,8 @@ class Client {
     }
     sendDiscussionsList() {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log("entree dans this.sendDiscussionsList");
+            console.log(this.username);
             const discussions = yield this.db.getElementsFromUser('id_discussion', this.username);
             const discussionsList = [];
             for (let i = 0; i < discussions.length; i++) {
@@ -63,7 +65,9 @@ class Client {
                 }
                 discussionsList.push({ id, participants });
             }
-            console.log('discussionsList' + discussionsList);
+            ;
+            console.log('discussionsList');
+            console.log(discussionsList);
             this.sendMessage('discussionsList', discussionsList);
         });
     }
@@ -117,9 +121,10 @@ class Client {
     }
     removeContact(contact) {
         return __awaiter(this, void 0, void 0, function* () {
-            this.sendMessage('removeContact', contact);
-            yield this.db.deleteInvitationsOrContacts('contacts', contact, this.username);
-            yield this.db.deleteInvitationsOrContacts('contacts', this.username, contact);
+            yield this.db.deleteInvitationsOrContacts('contact', contact, this.username);
+            yield this.db.deleteInvitationsOrContacts('contact', this.username, contact);
+            this.sendContactsList();
+            this.server.sendFriendContactsList(contact);
         });
     }
     onMessage(utf8Data) {
@@ -161,7 +166,21 @@ class Client {
             case 'forgottenpassword':
                 this.onPasswordForgotten(message.data);
                 break;
+            case 'disconnection':
+                this.onDisconnection(message.data);
+                break;
+            case 'newUsername':
+                this.onNewUsername(message.data);
+                break;
+            case 'newPassword':
+                this.onNewPassword(message.data);
+                break;
         }
+    }
+    onDisconnection(username) {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.server.broadcastUserConnection('disconnection', username);
+        });
     }
     onUserLogin(username, password) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -225,6 +244,38 @@ class Client {
             }
         });
     }
+    onNewUsername({ oldUsername: oldUsername, newUsername: newUsername }) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const i = yield this.db.checkIfUserExists(newUsername);
+            console.log(i);
+            if (i === 1) {
+                this.sendMessage('newUserNameAlreadyUsed', 'Pseudo déjà utilisé ');
+                return;
+            }
+            else {
+                yield this.db.changeUsername(oldUsername, newUsername);
+                this.username = newUsername;
+                this.sendMessage('onNewUsername', newUsername);
+                this.server.sendFriendsContactsList(newUsername);
+                this.server.broadcastDiscussionsListOnNewName(this.userId); /// CE QUE J AI AJOUTE
+                return;
+            }
+        });
+    }
+    onNewPassword({ username: username, oldPassword: oldPassword, newPassword: newPassword }) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const verifyPassword = yield this.db.verifyPasswordWithHashCode(username, oldPassword);
+            if (!verifyPassword) {
+                this.sendMessage('statePassword', 'Mot de passe incorrect ');
+                return;
+            }
+            else {
+                this.db.changePasswordFromUsername(username, newPassword);
+                this.sendMessage('statePassword', 'Mot de passe modifié');
+                return;
+            }
+        });
+    }
     onInstantMessage(discussionId, content, participants) {
         if (!(typeof 'content' === 'string'))
             return;
@@ -265,15 +316,14 @@ class Client {
             const id = yield this.db.createDiscussion(this.userId, contactId);
             this.onFetchDiscussion(id);
             console.log('a chargé la disc ' + id + '; client.ts onCreateDiscussion ' + contactId + ' terminé');
-            this.sendDiscussionsList();
-            this.server.broadcastCreateDiscussion(contactId, id);
             yield this.db.addDiscussionIdToUser(this.userId, id);
+            this.server.broadcastCreateDiscussion(contactId, id);
+            this.sendDiscussionsList();
         });
     }
     onFetchDiscussion(id) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('client.ts on entre dans la fonction onFetchDiscussion ' + id);
-            this.currentDiscussion = id;
             const participants = yield this.db.getParticipants(id);
             const history = yield this.db.getHistory(id);
             const discussion = { id, participants, history };
@@ -301,7 +351,7 @@ class Client {
             console.log(this.userId + 'quitte discussion' + id);
             yield this.db.deleteParticipantFromDiscussion(id, this.userId);
             yield this.db.deleteDiscussionFromUser(this.userId, id);
-            this.sendDiscussionsList(); // nécessaire mais pourquoi ?
+            this.sendDiscussionsList();
             this.server.broadcastUpdateDiscussionList(id);
         });
     }
